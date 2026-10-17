@@ -1,0 +1,51 @@
+{
+  "name": "plan2",
+  "mode": "char-weight",
+  "seed": null,
+  "theme": "light",
+  "blocks": [
+    {
+      "id": "ig8mfx8g9n",
+      "kind": "work-range",
+      "color": "red",
+      "weight": 1,
+      "enabled": true,
+      "params": {
+        "years": [
+          2022,
+          2022
+        ],
+        "tag_groups": [
+          [
+            {
+              "name": "治愈",
+              "kind": "work",
+              "color": "red"
+            },
+            {
+              "name": "日常",
+              "kind": "work",
+              "color": "red"
+            },
+            {
+              "name": "百合",
+              "kind": "work",
+              "color": "blue"
+            }
+          ]
+        ],
+        "rank_basis": "per_year",
+        "rank_value_kind": "rank",
+        "rank_lo": 1,
+        "rank_hi": 300,
+        "roles_scope": "all",
+        "role_rank_kind": "rank",
+        "role_rank_lo": 1,
+        "role_rank_hi": 5
+      }
+    }
+  ],
+  "include_extra_work_tags": false,
+  "created_at": "2026-10-15T16:00:00.000000+00:00",
+  "updated_at": "2026-10-15T16:00:00.000000+00:00"
+}

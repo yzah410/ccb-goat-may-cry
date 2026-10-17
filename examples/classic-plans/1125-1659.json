@@ -1,0 +1,35 @@
+{
+  "name": "1125-1659",
+  "mode": "char-weight",
+  "seed": null,
+  "theme": "light",
+  "blocks": [
+    {
+      "id": "p26yc4d4r3s",
+      "kind": "work-list",
+      "color": "red",
+      "weight": 100,
+      "enabled": false,
+      "params": {
+        "work_lines": "魔法科高校的劣等生",
+        "roles_scope": "all",
+        "role_rank_kind": "rank",
+        "role_rank_lo": 1,
+        "role_rank_hi": 50
+      }
+    },
+    {
+      "id": "u61dq3d982",
+      "kind": "char-list",
+      "color": "red",
+      "weight": 1000,
+      "enabled": true,
+      "params": {
+        "char_lines": "時崎狂三"
+      }
+    }
+  ],
+  "include_extra_work_tags": false,
+  "created_at": "2026-10-15T16:00:00.000000+00:00",
+  "updated_at": "2026-10-15T16:00:00.000000+00:00"
+}

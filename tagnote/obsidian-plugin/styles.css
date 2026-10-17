@@ -1,0 +1,72 @@
+/* TagNote 插件样式。
+   引擎画在 Shadow DOM 里，Obsidian 和其它插件的 CSS 碰不到它；这里只做两件事：
+   1. 在挂载元素 .tagnote-host 上设置 --tn-* 变量，让底色、文字、线、强调色、字体跟 Obsidian 主题走。
+      外部样式优先于引擎内部的 :host 默认值。
+      标签的色相和写法（荧光笔亮度 --tn-hl*、字色 --tn-tg*、领地线 --tn-ln*）不在这里设，
+      由引擎按 data-theme（插件随 body.theme-dark 设成 light / dark）切换。
+   2. 视图容器、读不出数据时的提示、代码块卡片。 */
+
+.tagnote-host {
+  --tn-paper: var(--background-primary);
+  --tn-paper-2: var(--background-secondary);
+  --tn-card: var(--background-primary);
+  --tn-dot: var(--background-modifier-border);
+  --tn-ink: var(--text-normal);
+  --tn-ink-2: var(--text-muted);
+  --tn-ink-3: color-mix(in srgb, var(--text-muted) 55%, var(--text-faint));
+  --tn-line: var(--background-modifier-border);
+  --tn-line-2: var(--background-modifier-border-focus);
+  /* 强调色往正文色靠 35%：浅色主题下浅强调色（如黄色）的外框、选中线仍看得清 */
+  --tn-accent: color-mix(in oklab, var(--interactive-accent) 65%, var(--text-normal));
+  --tn-accent-2: color-mix(in srgb, var(--interactive-accent) 16%, var(--background-primary));
+  --tn-edge: color-mix(in srgb, var(--text-faint) 70%, var(--text-muted));
+  --tn-f-body: var(--font-interface);
+  --tn-f-mono: var(--font-monospace);
+  --tn-sticky-top: 0px;
+  /* 「标签与近邻」侧栏的最大高度：按本面板的可视高度算（--tnp-scroll-h 由插件量出来写上；量不到时按整个窗口） */
+  --tn-drawer-max: calc(var(--tnp-scroll-h, 100vh) - var(--tn-sticky-top) - 24px);
+  /* 引擎下方一定空着的高度，就是下面这个 padding-bottom：滚到底时侧栏可以伸进去，不会被推到顶栏下面 */
+  --tn-space-below: 24px;
+  padding: 0 0 24px;
+}
+
+/* 深色：和引擎一样，画板比页面暗一点、卡片比页面亮一点，卡片和画板才分得开 */
+.theme-dark .tagnote-host {
+  --tn-paper-2: color-mix(in srgb, var(--background-primary) 82%, black);
+  --tn-card: var(--background-secondary);
+}
+
+.workspace-leaf-content[data-type="tagnote-view"] > .view-content.tagnote-view-content {
+  padding: 0 var(--size-4-4, 16px);
+  overflow: auto;
+}
+
+/* 读不出数据时 */
+.tagnote-error {
+  max-width: 640px;
+  margin: 48px auto;
+  padding: 20px 24px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--radius-m, 8px);
+  background: var(--background-secondary);
+  color: var(--text-normal);
+}
+.tagnote-error p { margin: 0 0 10px; }
+.tagnote-error .tagnote-error-title { font-weight: var(--font-semibold, 600); }
+.tagnote-error .tagnote-error-reason { color: var(--text-muted); user-select: text; word-break: break-word; }
+
+/* 笔记里 ```tagnote 代码块的卡片 */
+.tagnote-embed {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  padding: 12px 16px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--radius-m, 8px);
+  background: var(--background-secondary);
+}
+.tagnote-embed .tagnote-embed-title { font-weight: var(--font-semibold, 600); color: var(--text-normal); }
+.tagnote-embed.is-error { display: block; border-color: var(--background-modifier-error, var(--text-error)); }
+.tagnote-embed.is-error .tagnote-embed-title { color: var(--text-error); margin-bottom: 4px; }
+.tagnote-embed .tagnote-embed-reason { color: var(--text-muted); user-select: text; word-break: break-word; }

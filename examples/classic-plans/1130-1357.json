@@ -1,0 +1,33 @@
+{
+  "name": "1130-1357",
+  "mode": "char-weight",
+  "seed": null,
+  "theme": "cyber77",
+  "blocks": [
+    {
+      "id": "ss4c5s3t37n",
+      "kind": "work-range",
+      "color": "red",
+      "weight": 1,
+      "enabled": true,
+      "params": {
+        "years": [
+          1980,
+          2025
+        ],
+        "tag_groups": [],
+        "rank_basis": "per_year",
+        "rank_value_kind": "rank",
+        "rank_lo": 1,
+        "rank_hi": 20,
+        "roles_scope": "all",
+        "role_rank_kind": "rank",
+        "role_rank_lo": 1,
+        "role_rank_hi": 5
+      }
+    }
+  ],
+  "include_extra_work_tags": false,
+  "created_at": "2026-10-15T16:00:00.000000+00:00",
+  "updated_at": "2026-10-15T16:00:00.000000+00:00"
+}

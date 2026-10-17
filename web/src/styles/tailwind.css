@@ -1,0 +1,377 @@
+/*
+ * 样式入口。
+ *
+ * 层级（从低到高）：theme < base < tokens-base < components < utilities < 【主题包 tokens.css（不带 layer）】
+ * - tokens-base：所有 token 的默认值（兜底）
+ * - 主题包的 tokens.css 不带 @layer，天然比所有 layer 优先级高 → 主题写了的 token 一定生效
+ */
+@layer theme, base, tokens-base, components, utilities;
+
+@import "tailwindcss";
+@import "./tokens.base.css";
+
+/*
+ * 把 Tailwind 的主题变量全部映射到我们的 token（inline = 工具类直接用 var(--token)，运行时解析），
+ * 这样同一个 bg-surface-1 在不同 [data-theme] 作用域里自动变成不同颜色。
+ * 默认色板全部清空：共享组件只能用 token 颜色。
+ */
+@theme inline {
+  --color-*: initial;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+
+  --color-bg: var(--bg);
+  --color-bg-elevated: var(--bg-elevated);
+  --color-surface-1: var(--surface-1);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-surface-glass: var(--surface-glass);
+  --color-overlay: var(--overlay);
+  --color-selected: var(--selected-bg);
+
+  --color-fg-1: var(--text-1);
+  --color-fg-2: var(--text-2);
+  --color-fg-3: var(--text-3);
+  --color-on-primary: var(--text-on-primary);
+  --color-link: var(--text-link);
+
+  --color-primary: var(--primary);
+  --color-primary-50: var(--primary-50);
+  --color-primary-100: var(--primary-100);
+  --color-primary-200: var(--primary-200);
+  --color-primary-300: var(--primary-300);
+  --color-primary-400: var(--primary-400);
+  --color-primary-500: var(--primary-500);
+  --color-primary-600: var(--primary-600);
+  --color-primary-700: var(--primary-700);
+  --color-primary-800: var(--primary-800);
+  --color-primary-900: var(--primary-900);
+  --color-primary-hover: var(--primary-hover);
+
+  --color-accent: var(--accent);
+  --color-success: var(--success);
+  --color-success-bg: var(--success-bg);
+  --color-success-fg: var(--success-fg);
+  --color-warning: var(--warning);
+  --color-warning-bg: var(--warning-bg);
+  --color-warning-fg: var(--warning-fg);
+  --color-danger: var(--danger);
+  --color-danger-bg: var(--danger-bg);
+  --color-danger-fg: var(--danger-fg);
+  --color-info: var(--info);
+  --color-info-bg: var(--info-bg);
+  --color-info-fg: var(--info-fg);
+
+  --color-include: var(--include);
+  --color-exclude: var(--exclude);
+  --color-tag-playback: var(--tag-playback);
+  --color-tag-source: var(--tag-source);
+  --color-tag-genre: var(--tag-genre);
+  --color-tag-char: var(--tag-char);
+  --color-tag-va: var(--tag-va);
+
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-ring: var(--ring);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-chart-6: var(--chart-6);
+  --color-chart-7: var(--chart-7);
+  --color-chart-8: var(--chart-8);
+  --color-chart-grid: var(--chart-grid);
+  --color-chart-axis: var(--chart-axis);
+
+  --radius-*: initial;
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+  --radius-full: var(--radius-full);
+
+  --shadow-*: initial;
+  --shadow-1: var(--shadow-1);
+  --shadow-2: var(--shadow-2);
+  --shadow-3: var(--shadow-3);
+
+  --font-*: initial;
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+  --font-mono: var(--font-mono);
+
+  /* 字号只有 6 档（全站字号档位不超过 6） */
+  --text-*: initial;
+  --text-xs: var(--fs-1);
+  --text-sm: var(--fs-2);
+  --text-base: var(--fs-3);
+  --text-lg: var(--fs-4);
+  --text-xl: var(--fs-5);
+  --text-2xl: var(--fs-6);
+
+  --leading-tight: var(--leading-tight);
+  --leading-body: var(--leading-body);
+  --tracking-tight: var(--tracking-tight);
+
+  /* 间距跟着密度走：p-4 = 4 × --space-unit */
+  --spacing: var(--space-unit);
+
+  --blur-glass: var(--backdrop-blur);
+  --ease-theme: var(--motion-ease);
+  --default-transition-duration: var(--motion-duration);
+  --default-transition-timing-function: var(--motion-ease);
+
+  --animate-spin: spin 0.9s linear infinite;
+  --animate-pulse-soft: pulse-soft 1.6s ease-in-out infinite;
+}
+
+/* 深色变体：共享组件请不要用 dark:（嵌套作用域下会判断错），一律用 token。这里只给主题包兜底用。 */
+@custom-variant dark (&:where([data-mode="dark"], [data-mode="dark"] *));
+
+@layer base {
+  *,
+  ::before,
+  ::after {
+    border-color: var(--border);
+  }
+
+  html {
+    color-scheme: light;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+  html[data-mode="dark"],
+  [data-theme-scope][data-mode="dark"] {
+    color-scheme: dark;
+  }
+  [data-theme-scope][data-mode="light"] {
+    color-scheme: light;
+  }
+
+  html,
+  body {
+    height: 100%;
+  }
+
+  body,
+  [data-theme-scope] {
+    background-color: var(--bg);
+    color: var(--text-1);
+    font-family: var(--font-body);
+    font-size: var(--fs-3);
+    line-height: var(--leading-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: "cv11", "ss01";
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: var(--heading-weight);
+    letter-spacing: var(--tracking-tight);
+    line-height: var(--leading-tight);
+  }
+
+  code,
+  kbd,
+  samp,
+  pre {
+    font-family: var(--font-mono);
+  }
+
+  ::selection {
+    background: var(--primary-200);
+    color: var(--text-1);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]) {
+    cursor: pointer;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--text-3);
+    opacity: 1;
+  }
+
+  /* 数字统一用等宽数字，统计块/页码不跳 */
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@layer components {
+  /* 主题作用域：ThemeScope 渲染的 div 带这个属性 */
+  [data-theme-scope] {
+    position: relative;
+    isolation: isolate;
+  }
+  /* 嵌套作用域（分屏对比）：让 fixed 定位的弹层也被关在自己的格子里 */
+  [data-theme-scope][data-nested="true"] {
+    contain: layout paint;
+  }
+
+  /* 壁纸层：框架提供的外壳，主题的 Backdrop 渲染在它里面 */
+  [data-slot="backdrop"] {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  /* 细滚动条（跟着 token 走） */
+  .scroll-thin {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-strong) transparent;
+  }
+
+  /* 玻璃面：外框、浮层 */
+  .glass {
+    background-color: var(--surface-glass);
+    -webkit-backdrop-filter: blur(var(--backdrop-blur)) saturate(140%);
+    backdrop-filter: blur(var(--backdrop-blur)) saturate(140%);
+  }
+
+  /* 骨架屏微光 */
+  .skeleton {
+    background: linear-gradient(
+      90deg,
+      var(--surface-2) 0%,
+      var(--surface-3) 40%,
+      var(--surface-2) 80%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.6s linear infinite;
+  }
+}
+
+/* 减少动效：设置里选「减少」或系统设置了 prefers-reduced-motion（且没在设置里强制「正常」） */
+html[data-motion="reduce"] *,
+html[data-motion="reduce"] *::before,
+html[data-motion="reduce"] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  html:not([data-motion="full"]) *,
+  html:not([data-motion="full"]) *::before,
+  html:not([data-motion="full"]) *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* 共享动效（时长/曲线都走 token；减少动效时被上面的规则压成 0） */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes pulse-soft {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+@keyframes shimmer {
+  from {
+    background-position: -200% 0;
+  }
+  to {
+    background-position: 200% 0;
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(-2px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+/* Tailwind v4 的 -translate-x-1/2 用的是独立的 translate 属性，这里只动 transform，互不干扰 */
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes toast-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+}
+@keyframes highlight-flash {
+  from {
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent) 55%, transparent);
+  }
+  to {
+    box-shadow: 0 0 0 3px transparent;
+  }
+}
+/* AI 进行中的不定长进度条（一小段从左滑到右） */
+@keyframes ai-progress {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(300%);
+  }
+}

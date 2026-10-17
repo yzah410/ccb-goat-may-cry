@@ -1,0 +1,193 @@
+/*
+ * base 主题 token —— 写新主题时照着抄的「完整模板」。
+ *
+ * 做新主题：把这个文件复制到 src/themes/<你的id>/tokens.css，
+ *   1) 把所有 [data-theme="base"] 换成 [data-theme="<你的id>"]
+ *   2) 改值（不要删 token；删了会用 base 的值兜底并在控制台 warn）
+ *   3) 只做单一明暗的主题：删掉整个 [data-mode="dark"] 块，并在 manifest.modes 里只写一种
+ *
+ * 规则：
+ * - 不要包 @layer（不带 layer 的声明优先级最高，保证你的值一定生效）
+ * - 密度 token（--space-unit / --control-h-*）不要写，交给 manifest.density
+ * - 这是纯 CSS，不要写 @apply / theme()
+ *
+ * ⚠️ 本文件由 scripts/gen-base-tokens.mjs 从 src/styles/tokens.base.css 生成，改 base 的值请改那边再重新生成。
+ */
+
+[data-theme="base"] {
+  /* 背景与表面 */
+  --bg: #f5f6f8;
+  --bg-elevated: #fafbfc;
+  --surface-1: #ffffff;
+  --surface-2: #f3f4f6;
+  --surface-3: #e9ebef;
+  --surface-glass: rgb(255 255 255 / 0.72);
+  --overlay: rgb(15 18 26 / 0.45);
+  --selected-bg: var(--primary-50);
+
+  /* 文字 */
+  --text-1: #16181d;
+  --text-2: #505662;
+  --text-3: #6a717d;
+  --text-on-primary: #ffffff;
+  --text-link: #5b45b4;
+
+  /* 主色色阶 */
+  --primary: #6e56cf;
+  --primary-50: #f7f5ff;
+  --primary-100: #efebff;
+  --primary-200: #ded6fe;
+  --primary-300: #c6b8fb;
+  --primary-400: #a893f5;
+  --primary-500: #8b6fec;
+  --primary-600: #6e56cf;
+  --primary-700: #5b45b4;
+  --primary-800: #493892;
+  --primary-900: #362a6c;
+  --primary-hover: color-mix(in oklab, var(--primary), black 14%);
+
+  /* 语义色 */
+  --accent: #0f9f8f;
+  --success: #1f9d55;
+  --success-bg: #e7f6ed;
+  --success-fg: #146c3b;
+  --warning: #d98a04;
+  --warning-bg: #fff5e0;
+  --warning-fg: #8a5300;
+  --danger: #dc3b3b;
+  --danger-bg: #fdecec;
+  --danger-fg: #a42323;
+  --info: #2f7fe0;
+  --info-bg: #e9f2fd;
+  --info-fg: #1c5aa6;
+
+  /* 业务语义 */
+  --include: #e0533b;
+  --exclude: #2f6fdb;
+  --tag-playback: #0891a8;
+  --tag-source: #c2760c;
+  --tag-genre: #2e9a58;
+  --tag-char: #c2418c;
+  --tag-va: #8250c8;
+
+  /* 边框与焦点 */
+  --border: #e3e5e9;
+  --border-strong: #cfd3da;
+  --ring: #8b6fec;
+
+  /* 形状 */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  /* 阴影 */
+  --shadow-1: 0 1px 2px rgb(16 24 40 / 0.04), 0 1px 3px rgb(16 24 40 / 0.06);
+  --shadow-2: 0 4px 12px -2px rgb(16 24 40 / 0.08), 0 2px 4px -2px rgb(16 24 40 / 0.05);
+  --shadow-3: 0 16px 40px -8px rgb(16 24 40 / 0.18), 0 6px 12px -6px rgb(16 24 40 / 0.08);
+
+  /* 字体 */
+  --font-display: "Inter Variable", "Noto Sans SC Variable", system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+  --font-body: "Inter Variable", "Noto Sans SC Variable", system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, "Cascadia Code", Consolas, monospace;
+  --tracking-tight: -0.02em;
+  --leading-tight: 1.15;
+  --fs-1: 12px;
+  --fs-2: 13px;
+  --fs-3: 14px;
+  --fs-4: 16px;
+  --fs-5: 20px;
+  --fs-6: 24px;
+  --leading-body: 1.55;
+  --heading-weight: 600;
+
+  /* 图表 */
+  --chart-1: #2a78d6;
+  --chart-2: #eb6834;
+  --chart-3: #1baf7a;
+  --chart-4: #eda100;
+  --chart-5: #e87ba4;
+  --chart-6: #008300;
+  --chart-7: #4a3aa7;
+  --chart-8: #e34948;
+  --chart-grid: #e8eaee;
+  --chart-axis: #6a717d;
+
+  /* 效果 */
+  --backdrop-blur: 12px;
+  --backdrop-opacity: 1;
+  --motion-duration: 160ms;
+  --motion-ease: cubic-bezier(0.2, 0, 0, 1);
+}
+
+[data-theme="base"][data-mode="dark"] {
+  --bg: #101114;
+  --bg-elevated: #15171b;
+  --surface-1: #1a1c21;
+  --surface-2: #212329;
+  --surface-3: #2a2d34;
+  --surface-glass: rgb(26 28 33 / 0.72);
+  --overlay: rgb(0 0 0 / 0.6);
+  --selected-bg: var(--primary-50);
+
+  --text-1: #eceef2;
+  --text-2: #a8aeb9;
+  --text-3: #8a919d;
+  --text-on-primary: #ffffff;
+  --text-link: #b4a3f8;
+
+  --primary: #6e56cf;
+  --primary-50: #19152b;
+  --primary-100: #211b3b;
+  --primary-200: #2c2452;
+  --primary-300: #3a2f6e;
+  --primary-400: #4d3f93;
+  --primary-500: #6e56cf;
+  --primary-600: #7d66d9;
+  --primary-700: #9d8bef;
+  --primary-800: #c1b4f7;
+  --primary-900: #e6e0ff;
+  --primary-hover: color-mix(in oklab, var(--primary), black 14%);
+
+  --accent: #2cc2a6;
+  --success: #3cc47a;
+  --success-bg: rgb(60 196 122 / 0.14);
+  --success-fg: #7ee2a8;
+  --warning: #f0b33c;
+  --warning-bg: rgb(240 179 60 / 0.14);
+  --warning-fg: #f7cf7a;
+  --danger: #f0645c;
+  --danger-bg: rgb(240 100 92 / 0.15);
+  --danger-fg: #ff9a92;
+  --info: #5b9cf0;
+  --info-bg: rgb(91 156 240 / 0.15);
+  --info-fg: #9cc4f7;
+
+  --include: #f06a52;
+  --exclude: #5b92f0;
+  --tag-playback: #38bdd0;
+  --tag-source: #e0a040;
+  --tag-genre: #4cc27c;
+  --tag-char: #e070b0;
+  --tag-va: #a987ea;
+
+  --border: rgb(255 255 255 / 0.09);
+  --border-strong: rgb(255 255 255 / 0.16);
+  --ring: #9d8bef;
+
+  --shadow-1: 0 1px 2px rgb(0 0 0 / 0.3);
+  --shadow-2: 0 6px 16px -4px rgb(0 0 0 / 0.45);
+  --shadow-3: 0 20px 48px -12px rgb(0 0 0 / 0.6);
+
+  --chart-1: #3987e5;
+  --chart-2: #d95926;
+  --chart-3: #199e70;
+  --chart-4: #c98500;
+  --chart-5: #d55181;
+  --chart-6: #008300;
+  --chart-7: #9085e9;
+  --chart-8: #e66767;
+  --chart-grid: rgb(255 255 255 / 0.07);
+  --chart-axis: #8a919d;
+}

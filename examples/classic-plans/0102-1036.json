@@ -1,0 +1,224 @@
+{
+  "name": "0102-1036",
+  "mode": "char-weight",
+  "seed": null,
+  "theme": "light",
+  "blocks": [
+    {
+      "id": "ig8mfx8g9n",
+      "kind": "work-range",
+      "color": "red",
+      "weight": 1,
+      "enabled": true,
+      "params": {
+        "years": [
+          2020,
+          2020
+        ],
+        "tag_groups": [
+          []
+        ],
+        "rank_basis": "per_year",
+        "rank_value_kind": "rank",
+        "rank_lo": 1,
+        "rank_hi": 600,
+        "roles_scope": "all",
+        "role_rank_kind": "rank",
+        "role_rank_lo": 1,
+        "role_rank_hi": 1
+      }
+    },
+    {
+      "id": "kozoufbh2mp",
+      "kind": "char-list",
+      "color": "blue",
+      "weight": 1,
+      "enabled": false,
+      "params": {
+        "char_lines": "三谷结衣\nルーニア・ペルセポネー\n出云风子\n176787\n169554\n不死\n173063\n105806\n250479\n99977\n塞西莉亚\n阿斯塔\n花园\n142354 宫本武藏\n174192\n风花\n139431\n美久\n细井万莉子\n爆豪胜己\n菊千代\n希露菲\n156485\nHaru\n164498\n初音未来\n70470\n74169\n命运 97758\n薇薇 91696\n中国\n90497\n95935\n101035"
+      }
+    },
+    {
+      "id": "1un81e8klqf",
+      "kind": "char-list",
+      "color": "red",
+      "weight": 1,
+      "enabled": false,
+      "params": {
+        "char_lines": "早川静乃\nハーデュス・クロノア\n176790\n169551\n76464\nつゆくさ\n劳伦斯 116744\n诺艾儿·西尔法\n冰刃\n炸猪排\n87552\n花散仁央\n156490\nShao\n天野ミコト\n望月穗波\n72229\n79707\n97757\n94564\n370\n90498\n95933\n101031"
+      }
+    },
+    {
+      "id": "s477438vsje",
+      "kind": "char-range",
+      "color": "blue",
+      "weight": 1,
+      "enabled": true,
+      "params": {
+        "tag_groups": [
+          [
+            {
+              "name": "百合",
+              "kind": "work",
+              "color": "blue"
+            }
+          ],
+          [
+            {
+              "name": "日常",
+              "kind": "work",
+              "color": "red"
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "id": "6g4eoxupnkq",
+      "kind": "work-range",
+      "color": "blue",
+      "weight": 1,
+      "enabled": true,
+      "params": {
+        "years": [
+          1980,
+          2025
+        ],
+        "tag_groups": [],
+        "rank_basis": "per_year",
+        "rank_value_kind": "rank",
+        "rank_lo": 1,
+        "rank_hi": 10,
+        "roles_scope": "all",
+        "role_rank_kind": "rank",
+        "role_rank_lo": 1,
+        "role_rank_hi": 100
+      }
+    },
+    {
+      "id": "pf5dimuu9qe",
+      "kind": "work-range",
+      "color": "blue",
+      "weight": 1,
+      "enabled": true,
+      "params": {
+        "years": [
+          1980,
+          2025
+        ],
+        "tag_groups": [
+          [
+            {
+              "name": "国漫",
+              "kind": "work",
+              "color": "red"
+            }
+          ],
+          [
+            {
+              "name": "BL",
+              "kind": "work",
+              "color": "red"
+            }
+          ],
+          [
+            {
+              "name": "国产",
+              "kind": "work",
+              "color": "red"
+            }
+          ],
+          [
+            {
+              "name": "女性向",
+              "kind": "work",
+              "color": "red"
+            }
+          ],
+          [
+            {
+              "name": "韩国",
+              "kind": "work",
+              "color": "red"
+            }
+          ],
+          [
+            {
+              "name": "韩漫",
+              "kind": "work",
+              "color": "red"
+            }
+          ],
+          [
+            {
+              "name": "异世界",
+              "kind": "work",
+              "color": "red"
+            }
+          ],
+          [
+            {
+              "name": "欧美",
+              "kind": "work",
+              "color": "red"
+            }
+          ]
+        ],
+        "rank_basis": "per_year",
+        "rank_value_kind": "rank",
+        "rank_lo": 1,
+        "rank_hi": 2220,
+        "roles_scope": "all",
+        "role_rank_kind": "rank",
+        "role_rank_lo": 1,
+        "role_rank_hi": 5
+      }
+    },
+    {
+      "id": "pdlb2l7070i",
+      "kind": "char-range",
+      "color": "blue",
+      "weight": 1,
+      "enabled": true,
+      "params": {
+        "tag_groups": [
+          [
+            {
+              "name": "偶像",
+              "kind": "work",
+              "color": "red"
+            }
+          ]
+        ],
+        "genders": [
+          "♂"
+        ]
+      }
+    },
+    {
+      "id": "exdg6hc3q2k",
+      "kind": "work-range",
+      "color": "blue",
+      "weight": 1,
+      "enabled": true,
+      "params": {
+        "years": [
+          2021,
+          2025
+        ],
+        "tag_groups": [],
+        "rank_basis": "per_year",
+        "rank_value_kind": "rank",
+        "rank_lo": 1,
+        "rank_hi": 620,
+        "roles_scope": "all",
+        "role_rank_kind": "rank",
+        "role_rank_lo": 1,
+        "role_rank_hi": 1
+      }
+    }
+  ],
+  "include_extra_work_tags": false,
+  "created_at": "2026-10-15T16:00:00.000000+00:00",
+  "updated_at": "2026-10-15T16:00:00.000000+00:00"
+}

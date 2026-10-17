@@ -1,0 +1,20 @@
+{
+  "name": "obsidian-tagnote",
+  "version": "0.1.0",
+  "private": true,
+  "description": "TagNote 标签笔记：在 Obsidian 里把作品集标签笔记显示成六种可切换的图",
+  "main": "main.js",
+  "scripts": {
+    "dev": "node esbuild.config.mjs",
+    "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
+    "typecheck": "tsc -noEmit -skipLibCheck"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "esbuild": "0.25.10",
+    "monkey-around": "3.0.0",
+    "obsidian": "1.14.4",
+    "tslib": "2.8.1",
+    "typescript": "5.9.3"
+  }
+}

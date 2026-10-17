@@ -1,0 +1,60 @@
+<title>百合 2018 标签笔记</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;700;900&family=Noto+Serif+SC:wght@600;900&display=swap" rel="stylesheet">
+<style>
+/* Layout: 方格笔记本。页头只放集合名和换数据；下面整块是 TagNote 引擎（顶栏切换视图，右侧可收起的“标签与近邻”栏）。 */
+:root{
+  --paper: oklch(0.972 0.006 240); --card: oklch(0.995 0.003 240);
+  --ink: oklch(0.26 0.035 262); --ink-2: oklch(0.46 0.03 258); --ink-3: oklch(0.6 0.022 255);
+  --line: oklch(0.885 0.014 245); --line-2: oklch(0.77 0.02 250);
+  --f-display: "Noto Serif SC", "Noto Serif CJK SC", "Source Han Serif SC", "Songti SC", serif;
+  --f-body: "Noto Sans SC", "Noto Sans CJK SC", "Source Han Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --paper: oklch(0.205 0.014 258); --card: oklch(0.25 0.017 258); --ink: oklch(0.94 0.01 250); --ink-2: oklch(0.78 0.018 252); --ink-3: oklch(0.64 0.02 252);
+  --line: oklch(0.33 0.018 258); --line-2: oklch(0.45 0.022 256); color-scheme: dark; } }
+:root[data-theme="dark"]{
+  --paper: oklch(0.205 0.014 258); --card: oklch(0.25 0.017 258); --ink: oklch(0.94 0.01 250); --ink-2: oklch(0.78 0.018 252); --ink-3: oklch(0.64 0.02 252);
+  --line: oklch(0.33 0.018 258); --line-2: oklch(0.45 0.022 256); color-scheme: dark; }
+*{ box-sizing: border-box }
+body{ margin: 0; background: var(--paper); color: var(--ink); font-family: var(--f-body); font-size: 15px; line-height: 1.6 }
+.wrap{ padding-inline: clamp(16px, 2vw, 32px) }
+.masthead{ padding-block: 24px 4px; display:flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 10px 28px }
+.masthead h1{ font-family: var(--f-display); font-weight: 900; font-size: clamp(28px, 3.4vw, 42px); line-height: 1.1; margin: 0; letter-spacing: .02em; text-wrap: balance }
+.masthead h1 .yr{ font-family: var(--f-mono); font-weight: 600; letter-spacing: -.02em; margin-right: .2em }
+.masthead h1 .kind{ font-weight: 600; font-size: .6em; color: var(--ink-2); margin-left: .5em }
+.masthead .sub{ margin: 6px 0 0; color: var(--ink-2) }
+.masthead .sub b{ color: var(--ink); font-weight: 600 }
+.loader{ display:flex; gap: 8px; flex-wrap: wrap; align-items: center }
+.filebtn{ border: 1px dashed var(--line-2); background: none; border-radius: 999px; padding: 4px 13px; font: inherit; font-size: 13.5px; color: var(--ink-2); cursor: pointer }
+.filebtn:hover{ color: var(--ink); border-color: var(--ink-3) }
+#load-json{ position:absolute; width:1px; height:1px; opacity:0; pointer-events:none }
+#app{ --tn-sticky-top: env(safe-area-inset-top, 0px) }
+.err{ color: oklch(0.55 0.18 25); font-size: 13.5px }
+</style>
+
+<div class="wrap">
+  <header class="masthead">
+    <div>
+      <h1 id="ttl">标签笔记</h1>
+      <p class="sub" id="sub"></p>
+    </div>
+    <div class="loader">
+      <span class="err" id="err" role="status"></span>
+      <label class="filebtn" for="load-json">载入其它作品集 JSON</label><input type="file" id="load-json" accept=".json,application/json">
+      <button class="filebtn" id="reset-data" hidden>回到示例集</button>
+    </div>
+  </header>
+  <div id="app"></div>
+</div>
+
+<script type="application/json" id="data">/*__DATA__*/</script>
+<script type="application/json" id="covers">/*__COVERS__*/</script>
+<script>
+/*__ENGINE__*/
+</script>
+<script>
+/*__PAGE__*/
+</script>

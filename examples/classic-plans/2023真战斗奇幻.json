@@ -1,0 +1,176 @@
+{
+  "name": "2023真战斗奇幻",
+  "mode": "char-weight",
+  "seed": null,
+  "theme": "light",
+  "blocks": [
+    {
+      "id": "ig8mfx8g9n",
+      "kind": "work-range",
+      "color": "red",
+      "weight": 5,
+      "enabled": true,
+      "params": {
+        "years": [
+          2023,
+          2023
+        ],
+        "tag_groups": [],
+        "rank_basis": "per_year",
+        "rank_value_kind": "rank",
+        "rank_lo": 1,
+        "rank_hi": 600,
+        "roles_scope": "all",
+        "role_rank_kind": "rank",
+        "role_rank_lo": 1,
+        "role_rank_hi": 1
+      }
+    },
+    {
+      "id": "hod76wsz0so",
+      "kind": "char-range",
+      "color": "blue",
+      "weight": 1,
+      "enabled": true,
+      "params": {
+        "tag_groups": [
+          [
+            {
+              "name": "战斗",
+              "kind": "work",
+              "color": "blue"
+            }
+          ],
+          [
+            {
+              "name": "奇幻",
+              "kind": "work",
+              "color": "blue"
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "id": "6g4eoxupnkq",
+      "kind": "work-range",
+      "color": "blue",
+      "weight": 1,
+      "enabled": true,
+      "params": {
+        "years": [
+          1980,
+          2025
+        ],
+        "tag_groups": [],
+        "rank_basis": "per_year",
+        "rank_value_kind": "rank",
+        "rank_lo": 1,
+        "rank_hi": 10,
+        "roles_scope": "all",
+        "role_rank_kind": "rank",
+        "role_rank_lo": 1,
+        "role_rank_hi": 100
+      }
+    },
+    {
+      "id": "pf5dimuu9qe",
+      "kind": "work-range",
+      "color": "blue",
+      "weight": 1,
+      "enabled": true,
+      "params": {
+        "years": [
+          1980,
+          2025
+        ],
+        "tag_groups": [
+          [
+            {
+              "name": "国漫",
+              "kind": "work",
+              "color": "red"
+            }
+          ],
+          [
+            {
+              "name": "BL",
+              "kind": "work",
+              "color": "red"
+            }
+          ],
+          [
+            {
+              "name": "国产",
+              "kind": "work",
+              "color": "red"
+            }
+          ],
+          [
+            {
+              "name": "女性向",
+              "kind": "work",
+              "color": "red"
+            }
+          ],
+          [
+            {
+              "name": "异世界",
+              "kind": "work",
+              "color": "red"
+            }
+          ],
+          [
+            {
+              "name": "欧美",
+              "kind": "work",
+              "color": "red"
+            }
+          ]
+        ],
+        "rank_basis": "per_year",
+        "rank_value_kind": "rank",
+        "rank_lo": 1,
+        "rank_hi": 2220,
+        "roles_scope": "all",
+        "role_rank_kind": "rank",
+        "role_rank_lo": 1,
+        "role_rank_hi": 5
+      }
+    },
+    {
+      "id": "pdlb2l7070i",
+      "kind": "char-range",
+      "color": "blue",
+      "weight": 1,
+      "enabled": true,
+      "params": {
+        "tag_groups": [
+          [
+            {
+              "name": "偶像",
+              "kind": "work",
+              "color": "red"
+            }
+          ]
+        ],
+        "genders": [
+          "♂"
+        ]
+      }
+    },
+    {
+      "id": "9bvlpqz6y96",
+      "kind": "char-list",
+      "color": "blue",
+      "weight": 1,
+      "enabled": true,
+      "params": {
+        "char_lines": "屋島あかり"
+      }
+    }
+  ],
+  "include_extra_work_tags": false,
+  "created_at": "2026-10-15T16:00:00.000000+00:00",
+  "updated_at": "2026-10-15T16:00:00.000000+00:00"
+}

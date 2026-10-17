@@ -1,0 +1,250 @@
+{
+  "name": "2024继续练",
+  "mode": "char-weight",
+  "seed": null,
+  "theme": "light",
+  "blocks": [
+    {
+      "id": "ig8mfx8g9n",
+      "kind": "work-range",
+      "color": "red",
+      "weight": 1,
+      "enabled": true,
+      "params": {
+        "years": [
+          2024,
+          2024
+        ],
+        "tag_groups": [
+          []
+        ],
+        "rank_basis": "per_year",
+        "rank_value_kind": "rank",
+        "rank_lo": 1,
+        "rank_hi": 600,
+        "roles_scope": "all",
+        "role_rank_kind": "rank",
+        "role_rank_lo": 1,
+        "role_rank_hi": 1
+      }
+    },
+    {
+      "id": "bettfz41fp9",
+      "kind": "char-list",
+      "color": "blue",
+      "weight": 1,
+      "enabled": true,
+      "params": {
+        "char_lines": "细井万莉子\n爆豪胜己\n菊千代\n希露菲\n156485\nHaru\n164498"
+      }
+    },
+    {
+      "id": "v8bu7jv83gi",
+      "kind": "char-list",
+      "color": "red",
+      "weight": 1,
+      "enabled": true,
+      "params": {
+        "char_lines": "花散仁央\n156490\nShao\n天野ミコト"
+      }
+    },
+    {
+      "id": "s477438vsje",
+      "kind": "char-range",
+      "color": "blue",
+      "weight": 1,
+      "enabled": true,
+      "params": {
+        "tag_groups": [
+          [
+            {
+              "name": "百合",
+              "kind": "work",
+              "color": "blue"
+            },
+            {
+              "name": "偶像",
+              "kind": "work",
+              "color": "blue"
+            },
+            {
+              "name": "日常",
+              "kind": "work",
+              "color": "blue"
+            },
+            {
+              "name": "治愈",
+              "kind": "work",
+              "color": "blue"
+            },
+            {
+              "name": "运动",
+              "kind": "work",
+              "color": "blue"
+            },
+            {
+              "name": "科幻",
+              "kind": "work",
+              "color": "blue"
+            },
+            {
+              "name": "奇幻",
+              "kind": "work",
+              "color": "blue"
+            },
+            {
+              "name": "校园",
+              "kind": "work",
+              "color": "blue"
+            },
+            {
+              "name": "恋爱",
+              "kind": "work",
+              "color": "blue"
+            },
+            {
+              "name": "战斗",
+              "kind": "work",
+              "color": "blue"
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "id": "6g4eoxupnkq",
+      "kind": "work-range",
+      "color": "blue",
+      "weight": 1,
+      "enabled": true,
+      "params": {
+        "years": [
+          1980,
+          2025
+        ],
+        "tag_groups": [],
+        "rank_basis": "per_year",
+        "rank_value_kind": "rank",
+        "rank_lo": 1,
+        "rank_hi": 10,
+        "roles_scope": "all",
+        "role_rank_kind": "rank",
+        "role_rank_lo": 1,
+        "role_rank_hi": 100
+      }
+    },
+    {
+      "id": "pf5dimuu9qe",
+      "kind": "work-range",
+      "color": "blue",
+      "weight": 1,
+      "enabled": true,
+      "params": {
+        "years": [
+          1980,
+          2025
+        ],
+        "tag_groups": [
+          [
+            {
+              "name": "国漫",
+              "kind": "work",
+              "color": "red"
+            }
+          ],
+          [
+            {
+              "name": "BL",
+              "kind": "work",
+              "color": "red"
+            }
+          ],
+          [
+            {
+              "name": "国产",
+              "kind": "work",
+              "color": "red"
+            }
+          ],
+          [
+            {
+              "name": "女性向",
+              "kind": "work",
+              "color": "red"
+            }
+          ],
+          [
+            {
+              "name": "韩国",
+              "kind": "work",
+              "color": "red"
+            }
+          ],
+          [
+            {
+              "name": "韩漫",
+              "kind": "work",
+              "color": "red"
+            }
+          ],
+          [
+            {
+              "name": "异世界",
+              "kind": "work",
+              "color": "red"
+            }
+          ],
+          [
+            {
+              "name": "欧美",
+              "kind": "work",
+              "color": "red"
+            }
+          ]
+        ],
+        "rank_basis": "per_year",
+        "rank_value_kind": "rank",
+        "rank_lo": 1,
+        "rank_hi": 2220,
+        "roles_scope": "all",
+        "role_rank_kind": "rank",
+        "role_rank_lo": 1,
+        "role_rank_hi": 5
+      }
+    },
+    {
+      "id": "pdlb2l7070i",
+      "kind": "char-range",
+      "color": "blue",
+      "weight": 1,
+      "enabled": true,
+      "params": {
+        "tag_groups": [
+          [
+            {
+              "name": "偶像",
+              "kind": "work",
+              "color": "red"
+            }
+          ]
+        ],
+        "genders": [
+          "♂"
+        ]
+      }
+    },
+    {
+      "id": "dfxik105ms",
+      "kind": "char-list",
+      "color": "red",
+      "weight": 10,
+      "enabled": true,
+      "params": {
+        "char_lines": "东由宇\n藤森月\nAI酱\n157816\n浅川奈南\n作永きみ"
+      }
+    }
+  ],
+  "include_extra_work_tags": false,
+  "created_at": "2026-10-15T16:00:00.000000+00:00",
+  "updated_at": "2026-10-15T16:00:00.000000+00:00"
+}

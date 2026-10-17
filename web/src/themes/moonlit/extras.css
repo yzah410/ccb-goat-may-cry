@@ -1,0 +1,189 @@
+/*
+ * 月夜·萤火 · 视觉微调：背景、模糊、阴影、光晕、字体细节（布局和内容不变）
+ *
+ * 作用域：所有元素规则都放在
+ *   @scope ([data-theme="moonlit"]) to ([data-theme]:not([data-theme="moonlit"]))
+ * 里 —— 「最近的主题作用域是 moonlit」才生效。
+ * 这样根主题是 moonlit 时，画廊卡片 / 分屏对比里别的主题格子不会被染上玻璃效果；
+ * 反过来 moonlit 只是分屏里的一格时，这一格里也照样生效。
+ * （只写 [data-theme="moonlit"] 前缀的后代选择器会漏进嵌套的别的主题，所以不用它。）
+ * 不支持 @scope 的浏览器会整块忽略 → 退回实心卡片，不影响可读性。
+ */
+
+/* ------------------------------------------------------------------ 萤火（Backdrop / 空态 / 卡片角落共用） */
+@keyframes moonlit-drift {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(var(--mf-dx, 10px), var(--mf-dy, -14px), 0);
+  }
+}
+@keyframes moonlit-blink {
+  from {
+    opacity: var(--mf-lo, 0.2);
+  }
+  to {
+    opacity: var(--mf-hi, 0.9);
+  }
+}
+
+/* 类名只有本主题会用，前缀 + 专属类名，不会碰到别的主题 */
+[data-theme="moonlit"] .moonlit-firefly {
+  position: absolute;
+  border-radius: 9999px;
+  background: radial-gradient(circle, #fff8d6 0%, #f7df91 42%, rgb(247 223 145 / 0) 72%);
+  box-shadow: 0 0 8px 2px rgb(246 214 120 / 0.34);
+  /* 「减少动效」时动画被全局规则停掉：停在这个中等亮度，而不是消失 */
+  opacity: 0.55;
+  animation-name: moonlit-drift, moonlit-blink;
+  animation-duration: 12s, 4.5s;
+  animation-timing-function: ease-in-out, ease-in-out;
+  animation-iteration-count: infinite, infinite;
+  animation-direction: alternate, alternate;
+}
+[data-theme="moonlit"] .moonlit-firefly[data-still] {
+  animation: none;
+}
+
+/* ------------------------------------------------------------------ 主题页 / 404 没有壁纸时的星空、月牙和薄云（MoonCrescent.tsx）
+   compact（分屏对比格子）里组件不加这些类名 = 不动。
+   「减少动效」时全局规则把动画压成 0：元素停在它本来的样子（没有 transform、opacity 是属性里写的那个值）。 */
+
+/* 星星慢慢闪 */
+@keyframes moonlit-twinkle {
+  from {
+    opacity: var(--tw-hi, 0.8);
+  }
+  to {
+    opacity: var(--tw-lo, 0.3);
+  }
+}
+[data-theme="moonlit"] .moonlit-twinkle {
+  animation: moonlit-twinkle var(--tw-dur, 5s) ease-in-out var(--tw-delay, 0s) infinite alternate;
+}
+
+/* 薄云慢慢横向漂 */
+@keyframes moonlit-drift-x {
+  from {
+    transform: translate3d(calc(var(--dx, 20px) * -1), 0, 0);
+  }
+  to {
+    transform: translate3d(var(--dx, 20px), 0, 0);
+  }
+}
+[data-theme="moonlit"] .moonlit-drift {
+  animation: moonlit-drift-x var(--drift-dur, 60s) ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+/* 月牙的位置。按外壳宽度（@container shell）换地方，避开页头文字和卡片网格：
+   - 404：右上方（文字在正中间）
+   - 主题页、宽：页头那一条里，右侧按钮组（≈250px）左边再空 72px，和标题那一行齐平
+   - 主题页、1130px 以下：说明文字会一直排到按钮跟前 → 挪到按钮上方
+   - 主题页、768px 以下：页头竖排（按钮掉到下面）→ 标题那一行的最右边 */
+[data-theme="moonlit"] .moonlit-crescent-spot {
+  --d: clamp(36px, 3.1cqw, 56px);
+  position: absolute;
+  width: var(--d);
+  height: var(--d);
+  left: calc(71% - var(--d) / 2);
+  top: calc(16% - var(--d) / 2);
+}
+[data-theme="moonlit"] .moonlit-crescent-spot[data-gallery] {
+  left: auto;
+  right: calc(max(0px, (100cqw - 1480px) / 2) + 32px + 250px + 72px);
+  top: calc(93px - var(--d) / 2);
+}
+@container shell (max-width: 1129px) {
+  [data-theme="moonlit"] .moonlit-crescent-spot[data-gallery] {
+    --d: 34px;
+    right: 88px;
+    top: calc(80px - var(--d) / 2);
+  }
+}
+@container shell (max-width: 767px) {
+  [data-theme="moonlit"] .moonlit-crescent-spot[data-gallery] {
+    right: 26px;
+    top: calc(96px - var(--d) / 2);
+  }
+}
+
+@scope ([data-theme="moonlit"]) to ([data-theme]:not([data-theme="moonlit"])) {
+  /* -------------------------------------------------------------- 起雾的玻璃卡片
+     卡片 80% 实心 + 背后 16px 模糊：背景里的月晕、萤火、壁纸只剩一点颜色透过来。
+     正文对比度按最坏情况算过（背景最亮处 ≈ 壁纸透出 35%）：--text-3 仍 ≥ 4.9:1。
+     选中的卡（data-selected）保持实心的 --primary-50，不透明。 */
+  [data-slot="card"]:not([data-selected]):not(.glass),
+  [data-slot="stat-tile"] {
+    background-color: color-mix(in oklab, var(--surface-1) 80%, transparent);
+    -webkit-backdrop-filter: blur(16px) saturate(125%);
+    backdrop-filter: blur(16px) saturate(125%);
+  }
+
+  /* 光源在右上角：卡片上沿比其他三边亮一点（「月光落在玻璃上沿」） */
+  [data-slot="card"],
+  [data-slot="stat-tile"],
+  [data-slot="block-card"],
+  [data-slot="global-settings"] {
+    border-top-color: rgb(255 240 210 / 0.13);
+  }
+
+  /* -------------------------------------------------------------- 唯一会发光的按钮：主按钮 = 那轮月亮 */
+  [data-slot="button"][data-variant="primary"] {
+    box-shadow:
+      inset 0 1px 0 rgb(255 252 236 / 0.5),
+      0 0 0 1px rgb(255 236 180 / 0.16),
+      0 8px 26px -10px rgb(236 200 108 / 0.62);
+  }
+  /* 共享按钮的 hover 是「往黑色混 14%」，用在这轮亮金色的主按钮上，鼠标放上去反而变暗、发灰。
+     所以这里 hover 用更亮一点的金色 + 更大的月晕（深色字对更亮的金对比度更高：11.3 → 12.2；按下 7.1），按下才变暗。四态都分得清。 */
+  [data-slot="button"][data-variant="primary"]:hover {
+    background-color: color-mix(in oklab, var(--primary) 82%, #fff4d2);
+    box-shadow:
+      inset 0 1px 0 rgb(255 252 236 / 0.4),
+      0 0 0 1px rgb(255 236 180 / 0.22),
+      0 10px 32px -8px rgb(236 200 108 / 0.78);
+  }
+  [data-slot="button"][data-variant="primary"]:active {
+    background-color: color-mix(in oklab, var(--primary) 84%, black);
+    box-shadow:
+      inset 0 1px 2px rgb(40 30 0 / 0.25),
+      0 0 0 1px rgb(255 236 180 / 0.14),
+      0 4px 14px -8px rgb(236 200 108 / 0.5);
+  }
+
+  /* -------------------------------------------------------------- 开关：关着的时候滑块是深色、轨道也是深色，几乎看不见（base 深色也有这个问题）
+     → 关着时滑块换成月光灰（--text-3，对轨道 --surface-3 是 5.1:1）；开着时是金轨道 + 深色滑块，本来就清楚 */
+  [data-slot="switch"] > [data-state="unchecked"] {
+    background-color: var(--text-3);
+  }
+
+  /* -------------------------------------------------------------- 顶栏下沿 = 地平线：靠近右上角月晕的那一段被照亮（只换边框的颜色，不改粗细） */
+  [data-layout="topbar"] > header {
+    border-image: linear-gradient(
+        90deg,
+        var(--border) 0%,
+        var(--border) 52%,
+        rgb(242 213 133 / 0.3) 84%,
+        rgb(242 213 133 / 0.12) 100%
+      )
+      1;
+  }
+
+  /* -------------------------------------------------------------- 导航当前项：和「选中」同一种语言——被月光照亮的一块夜（--primary-100），下沿那道金线由 NavItemDecor 画 */
+  [data-nav][aria-current="page"] {
+    background-color: var(--primary-100);
+  }
+
+  /* -------------------------------------------------------------- 页标题：一层很淡的月光（不影响清晰度） */
+  [data-slot="page-header"] h1 {
+    text-shadow: 0 0 28px rgb(236 200 108 / 0.14);
+  }
+
+  /* -------------------------------------------------------------- 统计大数字用标题字体（Fraunces 的数字更有「刻度」感） */
+  [data-slot="stat-tile"] > .font-semibold {
+    font-family: var(--font-display);
+    letter-spacing: 0;
+  }
+}

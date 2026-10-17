@@ -1,0 +1,9 @@
+{
+  "id": "tagnote",
+  "name": "TagNote 标签笔记",
+  "version": "0.1.0",
+  "minAppVersion": "1.4.0",
+  "description": "把作品集标签笔记（tagnote: 1 的笔记）显示成六种可切换的图：分支画布、标签谱、卡诺图、增减阶梯、领地图、谱系。",
+  "author": "山羊五月哭",
+  "isDesktopOnly": false
+}

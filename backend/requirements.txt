@@ -1,0 +1,8 @@
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+orjson==3.10.7
+pydantic==2.9.2
+regex==2024.9.11
+playwright==1.61.0
+anyio==4.14.2
+pypinyin==0.55.0

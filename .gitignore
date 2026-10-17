@@ -1,0 +1,26 @@
+# ---- 虚拟环境 / 依赖 ----
+backend/venv/
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# ---- 本机配置（含绝对路径和 API key，不入库；.tmp 是保存设置时的临时文件）----
+backend/config.json
+backend/config.json.*.tmp
+
+# ---- 数据库和个人数据（方案、清单、分档）----
+/data/
+*.zip
+
+# ---- 编辑器 / 系统 ----
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
+
+# ---- 前端产物 ----
+web/node_modules/
+web/dist/
+web/.env*.local

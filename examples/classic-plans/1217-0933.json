@@ -1,0 +1,25 @@
+{
+  "name": "1217-0933",
+  "mode": "char-weight",
+  "seed": null,
+  "theme": "light",
+  "blocks": [
+    {
+      "id": "t6ym3aq0gir",
+      "kind": "work-list",
+      "color": "red",
+      "weight": 1,
+      "enabled": true,
+      "params": {
+        "work_lines": "大欺诈师 \n忧国的莫里亚蒂\n363414\nC团地 \n朋友游戏 \n鸭乃桥论的禁忌推理 \n蓝色巨星\n我家的英雄 \n川越男子合唱团 \n几分钟的欢呼\n漩涡 \n公主的管弦乐团 ",
+        "roles_scope": "all",
+        "role_rank_kind": "rank",
+        "role_rank_lo": 1,
+        "role_rank_hi": 1
+      }
+    }
+  ],
+  "include_extra_work_tags": false,
+  "created_at": "2026-10-15T16:00:00.000000+00:00",
+  "updated_at": "2026-10-15T16:00:00.000000+00:00"
+}

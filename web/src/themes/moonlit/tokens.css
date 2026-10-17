@@ -1,0 +1,123 @@
+/*
+ * 月夜·萤火（moonlit）—— 只有深色，所以只写一个块（manifest.modes = ['dark']）。
+ *
+ * 配色：
+ *   夜空靛蓝  #202533（OKLCH h≈270）→ 往紫偏一点（h 276）、压暗 → --bg / --surface-*
+ *   满月金    #eed584（OKLCH h≈93）  → 略加深加饱和 #ecc86c → --primary
+ *             这两个色相刚好相差 180°（互补），所以金色在靛蓝上最亮、最干净。
+ *   暖红      #9a625f（h≈20）        → 提亮到 #d47b7c → --accent（只标「当前题目」）
+ *   萤火      #f9ebab、#fddd68       → 萤火光点、焦点环 --ring
+ *   蓝光      #619edf（h≈251）       → --exclude / --info
+ *   暖粉      #e3b0a6                → 角色标签 --tag-char 往粉里推
+ *
+ * 规则：
+ * - 主色色阶 50–300 不是「稀释的金」（金混进靛蓝会变成泥灰），而是「被月光照亮的夜」：
+ *   偏紫的提亮靛蓝。400–900 才是金。组件里「淡底 + 深字」= 紫调提亮底 + 金色字，两种都成立。
+ * - 主按钮文字 --text-on-primary 是深靛墨色（金是亮色，白字只有 1.5:1）；危险按钮也用它（6.1:1）。
+ * - 密度 token 不写，交给 manifest.density。
+ */
+[data-theme="moonlit"] {
+  /* 背景与表面：同一个靛蓝色相，靠亮度分层 */
+  --bg: #0b0d1d;
+  --bg-elevated: #131627;
+  --surface-1: #16192d;
+  --surface-2: #1f2338;
+  --surface-3: #292d45;
+  --surface-glass: rgb(20 23 42 / 0.62);
+  --overlay: rgb(4 5 14 / 0.66);
+
+  /* 文字：主文字是月光下的象牙白（暖），次要文字退成带紫的灰（冷）——亮处暖、暗处冷 */
+  --text-1: #f3ecdd;
+  --text-2: #c1c0d3;
+  --text-3: #9d9db6;
+  --text-on-primary: #13122c;
+  --text-link: #f0d186;
+
+  /* 主色色阶（深色 = 反向：50 最暗，900 最亮） */
+  --primary: #ecc86c;
+  --primary-50: #24243c;
+  --primary-100: #2f2c4b;
+  --primary-200: #3e3961;
+  --primary-300: #554e7c;
+  --primary-400: #bd9946;
+  --primary-500: #d7b35b;
+  --primary-600: #ecc86c;
+  --primary-700: #f2d585;
+  --primary-800: #f7e2a2;
+  --primary-900: #f9efc9;
+
+  /* 语义色：警告推向橙（h 62），和月光金（h 88）拉开；危险是纯红，点缀是灰一点的暖红 */
+  --accent: #d47b7c;
+  --success: #69d39f;
+  --success-bg: rgb(105 211 159 / 0.14);
+  --success-fg: #a1e9c2;
+  --warning: #f8a558;
+  --warning-bg: rgb(248 165 88 / 0.14);
+  --warning-fg: #fdcb9a;
+  --danger: #f26a64;
+  --danger-bg: rgb(242 106 100 / 0.15);
+  --danger-fg: #fcb6b2;
+  --info: #73b1ea;
+  --info-bg: rgb(115 177 234 / 0.15);
+  --info-fg: #b2d7fc;
+
+  /* 业务语义：纳入 = 朱红（比点缀红更橙、更亮），排除 = 蓝光 */
+  --include: #f27753;
+  --exclude: #6ca6ec;
+  --tag-playback: #43c2cf;
+  --tag-source: #b5d26a;
+  --tag-genre: #6ccea6;
+  --tag-char: #e989b8;
+  --tag-va: #b39cf0;
+
+  /* 边框：带一点紫的透明白（10% / 17%），不用实心灰 */
+  --border: rgb(224 218 255 / 0.1);
+  --border-strong: rgb(224 218 255 / 0.17);
+  --ring: #f4d88c;
+
+  /* 形状：月亮是圆的——整体偏圆 */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 22px;
+  --radius-full: 9999px;
+
+  /* 阴影：深色里阴影几乎看不见，层次靠亮度；每层顶上一道 4–6% 的暖白细边 = 「月光打在玻璃上沿」 */
+  --shadow-1: inset 0 1px 0 rgb(255 244 214 / 0.045), 0 1px 2px rgb(2 3 10 / 0.35);
+  --shadow-2: inset 0 1px 0 rgb(255 244 214 / 0.06), 0 12px 32px -12px rgb(2 3 10 / 0.72);
+  --shadow-3: 0 28px 70px -18px rgb(2 3 10 / 0.82), 0 0 0 1px rgb(255 255 255 / 0.03), 0 0 90px -30px rgb(236 200 108 / 0.2);
+
+  /* 字体：标题宋体（月下写信的感觉），正文黑体；同一界面只有这两家 */
+  --font-display: "Fraunces Variable", "Noto Serif SC Variable", "Songti SC", "STSong", "SimSun", serif;
+  --font-body: "Manrope Variable", "Noto Sans SC Variable", system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, "Cascadia Code", Consolas, monospace;
+  --tracking-tight: -0.01em;
+  --leading-tight: 1.2;
+  --fs-1: 12px;
+  --fs-2: 13px;
+  --fs-3: 14px;
+  --fs-4: 16px;
+  --fs-5: 20px;
+  --fs-6: 26px;
+  --leading-body: 1.6;
+  --heading-weight: 600;
+
+  /* 图表色：在深色 --surface-1 上检查过区分度，包括色觉障碍模拟。
+     1 = 暗金（单系列、男），2 = 夜紫，5 = 玫粉（女） */
+  --chart-1: #b68f1b;
+  --chart-2: #8c69cd;
+  --chart-3: #2eaa7f;
+  --chart-4: #4780d2;
+  --chart-5: #c54f8e;
+  --chart-6: #d8732b;
+  --chart-7: #0b9db3;
+  --chart-8: #ce514b;
+  --chart-grid: rgb(224 218 255 / 0.07);
+  --chart-axis: #9d9db6;
+
+  /* 效果：外框毛玻璃 20px；壁纸在工作页只露 55%（Backdrop 读它）；动效慢一点、落地软（像萤火） */
+  --backdrop-blur: 20px;
+  --backdrop-opacity: 0.55;
+  --motion-duration: 220ms;
+  --motion-ease: cubic-bezier(0.22, 0.8, 0.3, 1);
+}

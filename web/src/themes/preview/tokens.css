@@ -1,0 +1,36 @@
+/*
+ * preview 主题 —— 故意只写了少量 token（其余走 base 兜底，控制台会 warn 一次，这是预期的）。
+ * 正式主题请从 ../base/tokens.css 整份复制再改，覆盖率要 100%。
+ *
+ * 取色：
+ *   #c3d6ec 浅蓝   → 加深成主色 #3f6ea8，再推 50–900
+ *   #e6eff5 蓝白   → 背景 #edf3f9
+ *   #fcf2ee 暖粉   → 加深成点缀色 #e0826e
+ */
+[data-theme="preview"] {
+  --bg: #edf3f9;
+  --surface-glass: rgb(255 255 255 / 0.62);
+  --border: #d9e3ee;
+
+  --primary: #3f6ea8;
+  --primary-50: #f3f7fc;
+  --primary-100: #e6eef8;
+  --primary-200: #cddcef;
+  --primary-300: #aec5e3;
+  --primary-400: #7fa0cc;
+  --primary-500: #5a84ba;
+  --primary-600: #3f6ea8;
+  --primary-700: #345b8c;
+  --primary-800: #2b4970;
+  --primary-900: #223955;
+  --ring: #5a84ba;
+  --text-link: #345b8c;
+
+  --accent: #e0826e;
+  --chart-1: #3f6ea8;
+
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --backdrop-blur: 18px;
+  --backdrop-opacity: 1;
+}

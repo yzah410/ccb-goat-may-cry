@@ -1,0 +1,14 @@
+{
+  "_comment": "复制为 config.json 后按本机情况修改。相对路径按仓库根解析。",
+  "autoclick": {
+    "cdp_port": 9223
+  },
+  "v2": {
+    "_comment": "出题器的配置。db_path 是出题器数据库文件（可选的 search_aliases.sqlite 放在同一目录）；AI 在网页的「设置 → AI」里填接口地址、模型和 API key，保存在 v2.ai.api；ai 段其余没写的项用 backend/v2/settings.py 的默认值。",
+    "db_path": "data/outsetter_v2.sqlite"
+  },
+  "classic": {
+    "_comment": "经典工作台。data_dir 是经典工作台数据所在的目录（来自经典工作台数据包）；目录里没有这份数据时，后端照常启动，只是没有经典工作台。",
+    "data_dir": "data/classic"
+  }
+}

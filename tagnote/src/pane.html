@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TagNote 格子布局示例</title>
+<!-- 由 build.py 生成 examples/pane.html：两个固定高度的格子并排，各挂一个 layout:'pane' 实例。
+     地址参数：?theme=light|dark  ?a=canvas&b=hasse（两个格子的初始视图）  ?hostfs=1（全屏交给宿主：这里用把格子铺满窗口模拟） -->
+<style>
+  html, body { margin: 0; height: 100%; }
+  body { display: flex; flex-direction: column; background: #e9ebef; font: 14px/1.5 system-ui, "Microsoft YaHei", sans-serif; color: #333; }
+  body.dark { background: #15171c; color: #bbb; }
+  header { flex: none; padding: 8px 14px; display: flex; gap: 14px; align-items: center; }
+  header code { font-size: 12px; opacity: .75; }
+  .split { flex: 1 1 auto; min-height: 0; display: flex; gap: 10px; padding: 0 10px 10px; }
+  .cell { flex: 1 1 0; min-width: 0; height: 640px; align-self: flex-start; background: #fff; border: 1px solid #c9ced6; border-radius: 10px; padding: 0 12px; overflow: hidden; }
+  body.dark .cell { background: #1d2027; border-color: #343a46; }
+  .cell > .tn { height: 100%; }
+  /* 全屏：铺满窗口。高度要写明——.cell 有 align-self: flex-start，固定定位时 height:auto 会按内容算（不随 inset 撑满） */
+  .cell.max { position: fixed; inset: 0; height: 100dvh; box-sizing: border-box; align-self: stretch; z-index: 10; border-radius: 0; }
+</style>
+</head>
+<body>
+<header><b>两个格子，各挂一个 'pane' 实例</b><code>按住空格拖动 = 平移；按住空格滚轮 = 缩放；Shift+1 显示全图；Shift+0 或点右下角百分比 = 回到初始</code></header>
+<div class="split">
+  <div class="cell" id="cellA"><div class="tn" id="a"></div></div>
+  <div class="cell" id="cellB"><div class="tn" id="b"></div></div>
+</div>
+<script type="application/json" id="data">/*__DATA__*/</script>
+<script type="application/json" id="covers">/*__COVERS__*/</script>
+<script src="../engine/tagnote.js"></script>
+<script>
+  const DATA = JSON.parse(document.getElementById('data').textContent);
+  const COVERS = (() => { try { return JSON.parse(document.getElementById('covers').textContent); } catch (e) { return {}; } })();
+  const Q = new URLSearchParams(location.search);
+  const theme = Q.get('theme') || 'auto';
+  if (theme === 'dark' || (theme === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches)) document.body.classList.add('dark');
+  window.log = [];
+  // 测试脚本可以用 mountPane 重新挂载（先 destroy 旧的）
+  window.mountPane = (id, extra) => {
+    const el = document.getElementById(id), cell = el.parentElement;
+    const hostfs = Q.get('hostfs') === '1';
+    const inst = TagNote.mount(el, DATA, Object.assign({
+      layout: 'pane', theme, toolbar: true, heads: false, notes: false,
+      coverOf: w => COVERS[w.subject_id] || null,
+      fullscreen: hostfs ? 'host' : 'engine',
+      onFullRequest: () => { window.log.push(['full', id]); const on = !cell.classList.contains('max'); cell.classList.toggle('max', on); inst.setHostFull(on); },
+      onViewportChange: (view, vp) => window.log.push(['vp', id, view, vp]),
+    }, extra || {}));
+    return inst;
+  };
+  window.A = mountPane('a', { view: Q.get('a') || 'canvas' });
+  window.B = mountPane('b', { view: Q.get('b') || 'hasse' });
+</script>
+</body>
+</html>

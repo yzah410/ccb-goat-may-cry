@@ -1,0 +1,335 @@
+{
+  "name": "0108-2050",
+  "mode": "char-weight",
+  "seed": null,
+  "theme": "light",
+  "blocks": [
+    {
+      "id": "ig8mfx8g9n",
+      "kind": "work-range",
+      "color": "red",
+      "weight": 1,
+      "enabled": true,
+      "params": {
+        "years": [
+          2019,
+          2019
+        ],
+        "tag_groups": [
+          []
+        ],
+        "rank_basis": "per_year",
+        "rank_value_kind": "rank",
+        "rank_lo": 1,
+        "rank_hi": 600,
+        "roles_scope": "all",
+        "role_rank_kind": "rank",
+        "role_rank_lo": 1,
+        "role_rank_hi": 1
+      }
+    },
+    {
+      "id": "kozoufbh2mp",
+      "kind": "char-list",
+      "color": "blue",
+      "weight": 1,
+      "enabled": true,
+      "params": {
+        "char_lines": "65356\n66554\n66266"
+      }
+    },
+    {
+      "id": "1un81e8klqf",
+      "kind": "char-list",
+      "color": "red",
+      "weight": 1,
+      "enabled": true,
+      "params": {
+        "char_lines": "66598\n68249\n66265"
+      }
+    },
+    {
+      "id": "s477438vsje",
+      "kind": "char-range",
+      "color": "blue",
+      "weight": 1,
+      "enabled": true,
+      "params": {
+        "tag_groups": [
+          [
+            {
+              "name": "校园",
+              "kind": "work",
+              "color": "blue"
+            },
+            {
+              "name": "后宫",
+              "kind": "work",
+              "color": "blue"
+            },
+            {
+              "name": "音乐",
+              "kind": "work",
+              "color": "blue"
+            },
+            {
+              "name": "偶像",
+              "kind": "work",
+              "color": "blue"
+            },
+            {
+              "name": "运动",
+              "kind": "work",
+              "color": "blue"
+            },
+            {
+              "name": "热血",
+              "kind": "work",
+              "color": "blue"
+            },
+            {
+              "name": "悬疑",
+              "kind": "work",
+              "color": "blue"
+            },
+            {
+              "name": "推理",
+              "kind": "work",
+              "color": "blue"
+            },
+            {
+              "name": "猎奇",
+              "kind": "work",
+              "color": "blue"
+            },
+            {
+              "name": "恋爱",
+              "kind": "work",
+              "color": "blue"
+            },
+            {
+              "name": "百合",
+              "kind": "work",
+              "color": "blue"
+            },
+            {
+              "name": "战斗",
+              "kind": "work",
+              "color": "blue"
+            },
+            {
+              "name": "奇幻",
+              "kind": "work",
+              "color": "blue"
+            },
+            {
+              "name": "科幻",
+              "kind": "work",
+              "color": "blue"
+            },
+            {
+              "name": "日常",
+              "kind": "work",
+              "color": "blue"
+            },
+            {
+              "name": "治愈",
+              "kind": "work",
+              "color": "blue"
+            },
+            {
+              "name": "搞笑",
+              "kind": "work",
+              "color": "blue"
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "id": "6g4eoxupnkq",
+      "kind": "work-range",
+      "color": "blue",
+      "weight": 1,
+      "enabled": true,
+      "params": {
+        "years": [
+          1980,
+          2025
+        ],
+        "tag_groups": [],
+        "rank_basis": "per_year",
+        "rank_value_kind": "rank",
+        "rank_lo": 1,
+        "rank_hi": 10,
+        "roles_scope": "all",
+        "role_rank_kind": "rank",
+        "role_rank_lo": 1,
+        "role_rank_hi": 100
+      }
+    },
+    {
+      "id": "pf5dimuu9qe",
+      "kind": "work-range",
+      "color": "blue",
+      "weight": 1,
+      "enabled": true,
+      "params": {
+        "years": [
+          1980,
+          2025
+        ],
+        "tag_groups": [
+          [
+            {
+              "name": "国漫",
+              "kind": "work",
+              "color": "red"
+            }
+          ],
+          [
+            {
+              "name": "BL",
+              "kind": "work",
+              "color": "red"
+            }
+          ],
+          [
+            {
+              "name": "国产",
+              "kind": "work",
+              "color": "red"
+            }
+          ],
+          [
+            {
+              "name": "女性向",
+              "kind": "work",
+              "color": "red"
+            }
+          ],
+          [
+            {
+              "name": "韩国",
+              "kind": "work",
+              "color": "red"
+            }
+          ],
+          [
+            {
+              "name": "韩漫",
+              "kind": "work",
+              "color": "red"
+            }
+          ],
+          [
+            {
+              "name": "异世界",
+              "kind": "work",
+              "color": "red"
+            }
+          ],
+          [
+            {
+              "name": "欧美",
+              "kind": "work",
+              "color": "red"
+            }
+          ]
+        ],
+        "rank_basis": "per_year",
+        "rank_value_kind": "rank",
+        "rank_lo": 1,
+        "rank_hi": 2220,
+        "roles_scope": "all",
+        "role_rank_kind": "rank",
+        "role_rank_lo": 1,
+        "role_rank_hi": 5
+      }
+    },
+    {
+      "id": "pdlb2l7070i",
+      "kind": "char-range",
+      "color": "blue",
+      "weight": 1,
+      "enabled": true,
+      "params": {
+        "tag_groups": [
+          [
+            {
+              "name": "偶像",
+              "kind": "work",
+              "color": "red"
+            }
+          ]
+        ],
+        "genders": [
+          "♂"
+        ]
+      }
+    },
+    {
+      "id": "4uf0d2m7ols",
+      "kind": "work-range",
+      "color": "blue",
+      "weight": 1,
+      "enabled": true,
+      "params": {
+        "years": [
+          2022,
+          2025
+        ],
+        "tag_groups": [],
+        "rank_basis": "per_year",
+        "rank_value_kind": "rank",
+        "rank_lo": 1,
+        "rank_hi": 620,
+        "roles_scope": "all",
+        "role_rank_kind": "rank",
+        "role_rank_lo": 1,
+        "role_rank_hi": 1
+      }
+    },
+    {
+      "id": "tft5j8mj5cf",
+      "kind": "work-list",
+      "color": "blue",
+      "weight": 1,
+      "enabled": true,
+      "params": {
+        "work_lines": "美妙射击部\n歌舞伎町夏洛克\n钻石王牌\n修业魔女璐璐萌\n八月的灰姑娘棒球队\n3D彼女\n涩谷保卫战\n只想受你欢迎。\n淫乱的青酱不能学习\n战姬绝唱SYMPHOGEAR\n薄暮\n女高中生的无所事事\n魔术学姐\n烟草 237423\n深夜的超自然公务员\n非枪人生\n星合之空\n普罗米亚\n家有女友\n偶像活动Friends\n你好 世界\n警视厅 特务部 特殊凶恶犯对策室 第七课\n飞翔吧！战机少女\n骚动时节的少女们啊\n流汗吧！健身少女\n七人魔法使\n歌牌情缘\n满月之战\n多罗罗\nHand Shakers\n幻海奇情\n兽娘动物园\n幻影死神\n千子\n一个人的○○小日子\n鸭子的天空\n在世界尽头咏唱恋曲的少女YU-NO\n超可动女孩1/6\nCOP CRAFT\n梦幻之星 神谕篇 277217\n消灭都市\n巴比伦\n狂赌之渊\n川柳少女\n神田川JET GIRLS\n荒野的寿飞行队\n强袭魔女\nZ/X IGNITION\n食戟之灵\n致曾为神之众兽\n笨拙之极的上野\n同居人时而在腿上、时而跑到脑袋上\n彼方的阿斯特拉\n非洲的动物上班族 278828\n只要可爱即使是变态你也会喜欢我吧？\n我们真的学不来\n刺客守则\n请问您今天要来点兔子吗？\n警视厅 特务部 特殊凶恶犯对策室 第七课\nFairy gone\n信长老师的年幼妻子\n你遭难了吗？\n环战公主 CIRCLET PRINCESS\n一弦定音！\n钢琴之森\n雨色可可\n玛纳利亚的密友\n刀使的巫女\n贤惠幼妻仙狐小姐\n裤袜视界\n知晓天空之蓝的人啊\nEndro~！\n黑狐\n为什么老师会在这里！？\nRobiHachi\n全力回避FLAG酱！\n耐え子の日常\n放学后桌游俱乐部\n摇曳百合\n宅男腐女恋爱真难\n喜欢本大爷的竟然就你一个？\nFairy gone\n妖怪手表\nHUMAN LOST 人间失格\n闪亮美妙☆频道 第二季\n梦幻之星 神谕篇\n魔法少女特殊战明日香\n若能与你共乘海浪之上\n叛逆性百万亚瑟王\n元气!! 江古田酱\n厨病激发BOY\n你好 世界\n四牌士\nLAIDBACKERS\n剧场版 Coluboccoro\nLINE NOVEL 印象映像 未来想象记\n相对世界\n夏生整备班长的战斗机讲座\n碧蓝幻想\n偶像大师 灰姑娘女孩 U149\n笑容的代价\nCAROLE & TUESDAY\n复活的骑士王\n日照雨\n天体的秩序\nCOP CRAFT",
+        "roles_scope": "all",
+        "role_rank_kind": "rank",
+        "role_rank_lo": 1,
+        "role_rank_hi": 10
+      }
+    },
+    {
+      "id": "ncielsbdraa",
+      "kind": "work-list",
+      "color": "red",
+      "weight": 5,
+      "enabled": true,
+      "params": {
+        "work_lines": "Re:Stage！Dream Days♪\n勇者斗恶龙 你的故事\n我们的七日战争\nNULL & PETA\n百慕大三角～Colorful Pastrale～\n无限之住人",
+        "roles_scope": "all",
+        "role_rank_kind": "rank",
+        "role_rank_lo": 1,
+        "role_rank_hi": 1
+      }
+    },
+    {
+      "id": "fnu04nemc7",
+      "kind": "char-list",
+      "color": "blue",
+      "weight": 1,
+      "enabled": true,
+      "params": {
+        "char_lines": "マーリヤ・ノエル\n芥川小代理\n戴雅\n黑田怜奈\n各务原安昙"
+      }
+    }
+  ],
+  "include_extra_work_tags": false,
+  "created_at": "2026-10-15T16:00:00.000000+00:00",
+  "updated_at": "2026-10-15T16:00:00.000000+00:00"
+}

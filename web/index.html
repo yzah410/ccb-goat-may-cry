@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="base" data-mode="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>山羊五月哭</title>
+    <script>
+      // 首帧前先把主题/明暗写到 <html> 上，避免深色主题先闪一下白屏。
+      // 真正的来源是 ThemeProvider（它会读 manifest 再校正一次）。
+      ;(function () {
+        try {
+          // 主题 id 别名表（目前为空），和 src/themes/aliases.ts 是同一份（内联脚本没法 import，改的话两边都要改）
+          var THEME_ALIASES = {}
+          var q = new URLSearchParams(location.search)
+          var s = {}
+          try {
+            s = (JSON.parse(localStorage.getItem('outsetter.prefs.v1') || '{}').state) || {}
+          } catch (e) {}
+          // 默认主题是月夜·萤火（moonlit）；<html> 上预先写的 data-theme="base" 只在这段脚本出错时兜底。
+          var rawTheme = q.get('theme') || s.theme || 'moonlit'
+          var theme = THEME_ALIASES[rawTheme] || rawTheme
+          var mode = q.get('mode') || s.resolvedMode || 'light'
+          var el = document.documentElement
+          el.setAttribute('data-theme', theme)
+          el.setAttribute('data-mode', mode === 'dark' ? 'dark' : 'light')
+          el.style.colorScheme = mode === 'dark' ? 'dark' : 'light'
+        } catch (e) {}
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

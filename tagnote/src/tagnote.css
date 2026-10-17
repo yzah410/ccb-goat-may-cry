@@ -1,0 +1,375 @@
+/* TagNote 引擎样式 —— 运行在 Shadow DOM 里，与宿主页面（出题器 / Obsidian）互不干扰。
+   宿主可在挂载元素上覆盖下列 --tn-* 变量来适配自己的风格（外部样式优先于 :host）。 */
+:host{
+  --tn-paper:   oklch(0.972 0.006 240);   /* 画板外的底色 */
+  --tn-paper-2: oklch(0.955 0.009 240);   /* 画板底色 */
+  --tn-dot:     oklch(0.86 0.014 245);    /* 画板点阵 */
+  --tn-card:    oklch(0.995 0.003 240);   /* 卡片 */
+  --tn-ink:     oklch(0.26 0.035 262);    /* 主文字 */
+  --tn-ink-2:   oklch(0.46 0.03 258);     /* 次文字 */
+  --tn-ink-3:   oklch(0.6 0.022 255);     /* 弱文字 */
+  --tn-line:    oklch(0.885 0.014 245);
+  --tn-line-2:  oklch(0.77 0.02 250);
+  --tn-accent:  oklch(0.5 0.17 264);      /* 钢笔蓝：焦点、悬停 */
+  --tn-accent-2:oklch(0.93 0.04 264);
+  --tn-edge:    oklch(0.68 0.035 255);    /* 连线 */
+  --tn-hlL: 0.885; --tn-hlC: 0.1;         /* 荧光笔底色：亮度 / 彩度（色相来自每个标签的 --h） */
+  --tn-tgL: 0.33;  --tn-tgC: 0.11;        /* 荧光笔上的字色 */
+  --tn-lnL: 0.6;   --tn-lnC: 0.14;        /* 领地线、反向标签描边 */
+  --tn-shadow: 0 1px 0 oklch(0.86 0.016 250), 0 6px 14px -10px oklch(0.35 0.06 262 / .35);
+  --tn-f-display: "Noto Serif SC", "Noto Serif CJK SC", "Source Han Serif SC", "Songti SC", "STSong", "SimSun", serif;
+  --tn-f-body: "Noto Sans SC", "Noto Sans CJK SC", "Source Han Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, sans-serif;
+  --tn-f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --tn-sticky-top: 0px;                   /* 侧栏吸顶时距滚动区域顶部的距离（宿主自己有吸顶栏时设成它的高度） */
+  --tn-z: 1;                              /* 字号倍率（由引擎设置） */
+  display: block; position: relative;
+  color: var(--tn-ink); font-family: var(--tn-f-body); font-size: 15px; line-height: 1.6;
+}
+@media (prefers-color-scheme: dark){ :host(:not([data-theme="light"])){
+  --tn-paper: oklch(0.205 0.014 258); --tn-paper-2: oklch(0.185 0.013 258); --tn-dot: oklch(0.33 0.018 258);
+  --tn-card: oklch(0.25 0.017 258); --tn-ink: oklch(0.94 0.01 250); --tn-ink-2: oklch(0.78 0.018 252); --tn-ink-3: oklch(0.64 0.02 252);
+  --tn-line: oklch(0.33 0.018 258); --tn-line-2: oklch(0.45 0.022 256); --tn-accent: oklch(0.8 0.12 256); --tn-accent-2: oklch(0.33 0.07 262);
+  --tn-edge: oklch(0.52 0.03 255); --tn-hlL: 0.43; --tn-hlC: 0.095; --tn-tgL: 0.95; --tn-tgC: 0.04; --tn-lnL: 0.74; --tn-lnC: 0.13;
+  --tn-shadow: 0 1px 0 oklch(0.3 0.02 258), 0 8px 18px -10px oklch(0 0 0 / .7);
+  color-scheme: dark; } }
+:host([data-theme="dark"]){
+  --tn-paper: oklch(0.205 0.014 258); --tn-paper-2: oklch(0.185 0.013 258); --tn-dot: oklch(0.33 0.018 258);
+  --tn-card: oklch(0.25 0.017 258); --tn-ink: oklch(0.94 0.01 250); --tn-ink-2: oklch(0.78 0.018 252); --tn-ink-3: oklch(0.64 0.02 252);
+  --tn-line: oklch(0.33 0.018 258); --tn-line-2: oklch(0.45 0.022 256); --tn-accent: oklch(0.8 0.12 256); --tn-accent-2: oklch(0.33 0.07 262);
+  --tn-edge: oklch(0.52 0.03 255); --tn-hlL: 0.43; --tn-hlC: 0.095; --tn-tgL: 0.95; --tn-tgC: 0.04; --tn-lnL: 0.74; --tn-lnC: 0.13;
+  --tn-shadow: 0 1px 0 oklch(0.3 0.02 258), 0 8px 18px -10px oklch(0 0 0 / .7);
+  color-scheme: dark; }
+:host(.tn-mono){ --tn-hlC: 0; --tn-tgC: 0; --tn-lnC: 0; }
+
+*{ box-sizing: border-box }
+[hidden]{ display: none !important }
+button{ font: inherit; color: inherit; appearance: none; -webkit-appearance: none; background: none; border: 0; box-shadow: none; margin: 0; height: auto; min-height: 0; cursor: pointer; }
+:focus-visible{ outline: 2px solid var(--tn-accent); outline-offset: 2px; border-radius: 4px }
+img{ max-width: 100% }
+
+/* ---------- 顶栏：视图切换 + 显示设置 ---------- */
+/* 顶栏不吸顶：看图时它不该压在图上；想切视图就滑回顶部 */
+.bar{ position: relative; z-index: 30; display:flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 6px 16px; border-bottom: 1px solid var(--tn-line); }
+.tabs{ display:flex; gap: 2px; overflow-x: auto; scrollbar-width: thin; min-width: 0; padding-top: 6px }
+.tab{ padding: 7px 14px 9px; white-space: nowrap; color: var(--tn-ink-2); font-size: 15.5px; font-weight: 500; border-bottom: 2.5px solid transparent; border-radius: 0; }
+.tab .no{ font-family: var(--tn-f-mono); font-size: 12px; color: var(--tn-ink-3); margin-right: 6px }
+.tab:hover{ color: var(--tn-ink) }
+.tab[aria-selected="true"]{ color: var(--tn-ink); border-bottom-color: var(--tn-accent) }
+.tab[aria-selected="true"] .no{ color: var(--tn-accent) }
+.tools{ display:flex; flex-wrap: wrap; gap: 6px; align-items: center; padding-block: 6px }
+.ctl{ display:inline-flex; align-items:center; gap: 2px; border: 1px solid var(--tn-line); background: var(--tn-card); border-radius: 999px; padding: 2px; }
+.ctl > span{ font-size: 12.5px; color: var(--tn-ink-3); padding: 0 5px 0 9px }
+.ctl button{ border-radius: 999px; padding: 2px 10px; font-size: 13.5px; color: var(--tn-ink-2) }
+.ctl button[aria-pressed="true"]{ background: var(--tn-ink); color: var(--tn-paper) }
+.ctl button:hover{ color: var(--tn-ink) }
+.ctl button[aria-pressed="true"]:hover{ color: var(--tn-paper) }
+.drawer-btn{ display:inline-flex; align-items:center; gap: 6px; border: 1px solid var(--tn-line-2); background: var(--tn-card); border-radius: 999px; padding: 3px 12px 3px 10px; font-size: 13.5px; color: var(--tn-ink-2) }
+.drawer-btn:hover{ color: var(--tn-ink); border-color: var(--tn-ink-3) }
+.drawer-btn[aria-expanded="true"]{ background: var(--tn-ink); color: var(--tn-paper); border-color: var(--tn-ink) }
+.drawer-btn .ar{ font-family: var(--tn-f-mono); font-size: 12px }
+.full-btn{ display:inline-flex; align-items:center; gap: 6px; border: 1px solid var(--tn-line-2); background: var(--tn-card); border-radius: 999px; padding: 3px 12px 3px 10px; font-size: 13.5px; color: var(--tn-ink-2) }
+.full-btn:hover{ color: var(--tn-ink); border-color: var(--tn-ink-3) }
+.full-btn svg{ width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round }
+
+.root{ container: tn / inline-size }
+/* 全屏：浏览器全屏（:fullscreen）或宿主不让全屏时铺满窗口（.overlay）。.root 自己滚动，侧栏贴着它的顶 */
+.root.full{ background: var(--tn-paper); overflow: auto; overscroll-behavior: contain; padding: 0 24px 24px; }
+.root.full.overlay{ position: fixed; inset: 0; z-index: 2147483000; }
+.root.full .drawer{ top: 12px; max-height: calc(100vh - 24px); margin-bottom: -64px; }
+
+/* ---------- 主体：视图 + 可收起的侧栏 ---------- */
+.frame{ display:grid; grid-template-columns: minmax(0,1fr) auto; gap: 0 18px; align-items: start; padding-block: 16px 40px }
+.main{ min-width: 0 }
+.vhead{ display:flex; flex-wrap: wrap; align-items: baseline; gap: 4px 18px; margin-bottom: 12px }
+.vhead h2{ font-family: var(--tn-f-display); font-weight: 900; font-size: 26px; margin: 0; letter-spacing: .03em }
+.vhead h2 .no{ font-family: var(--tn-f-mono); font-weight: 500; font-size: 15px; color: var(--tn-accent); margin-right: 10px; vertical-align: 3px }
+.vhead .howto{ color: var(--tn-ink-2); margin: 0; max-width: 78ch; font-size: 15px }
+.board-wrap{ overflow: auto; border: 1px solid var(--tn-line); border-radius: 14px; background-color: var(--tn-paper-2);
+  background-image: radial-gradient(circle, var(--tn-dot) 1.1px, transparent 1.4px); background-size: 22px 22px; padding: 30px 22px 34px; position: relative; }
+.board{ position: relative; margin: 0 auto; }
+.board > svg.edges{ position:absolute; left:0; top:0; overflow: visible; pointer-events: none }
+.board > .layer{ position:absolute; left:0; top:0; width: 100%; height: 100% }
+.board.flow > .layer{ position: static }
+.wait{ padding: 24px; color: var(--tn-ink-3) }
+
+/* 侧栏：标签索引 + 当前悬停的读数 */
+.drawer{ position: sticky; top: calc(var(--tn-sticky-top) + 12px); width: var(--tn-drawer-w, 248px);
+  max-height: var(--tn-drawer-max, calc(100vh - var(--tn-sticky-top) - 24px));
+  display:flex; flex-direction: column; overflow: hidden;
+  background: var(--tn-card); border: 1px solid var(--tn-line); border-radius: 14px; padding: 12px 12px 6px; box-shadow: var(--tn-shadow);
+  /* 吸顶元素不能越过所在格子的下沿：滚到底时，侧栏会被往上推、钻到顶栏下面。
+     负的下外边距让它可以伸进下面的空白：本框架的下内边距 40px，加上宿主声明的、引擎下方的空白 --tn-space-below。 */
+  margin-bottom: calc(-40px - var(--tn-space-below, 0px)); }
+/* 读数区高度由引擎按“最高的那条读数”固定下来；标签列表单独滚动。悬停时列表不会移动。 */
+.dr-list{ flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-gutter: stable; margin-right: -6px; padding: 0 6px 8px 0 }
+.dr-h{ flex: none; display:flex; align-items:center; justify-content: space-between; margin-bottom: 8px }
+.dr-h b{ font-family: var(--tn-f-display); font-weight: 900; font-size: 16px; letter-spacing: .04em }
+.dr-x{ font-size: 12.5px; color: var(--tn-ink-3); padding: 2px 6px; border-radius: 6px }
+.dr-x:hover{ color: var(--tn-ink); background: var(--tn-paper-2) }
+.now{ flex: none; border-radius: 10px; background: var(--tn-paper-2); padding: 9px 10px 10px; margin-bottom: 4px; min-height: 64px; font-size: 13.5px; color: var(--tn-ink-2);
+  overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-gutter: stable; }
+.now .hint{ color: var(--tn-ink-3); font-size: 13px; line-height: 1.55 }
+.now .k{ display:flex; align-items:center; gap: 6px; flex-wrap: wrap; font-size: 15px; color: var(--tn-ink); font-weight: 700; margin-bottom: 6px }
+.now .k .n{ font-family: var(--tn-f-mono); font-weight: 500; font-size: 12.5px; color: var(--tn-ink-3) }
+.now .pin{ font-size: 11.5px; font-weight: 500; color: var(--tn-accent); border: 1px solid currentColor; border-radius: 999px; padding: 0 6px }
+.now h5{ margin: 8px 0 3px; font-size: 11.5px; letter-spacing: .12em; color: var(--tn-ink-3); font-weight: 500 }
+.now ul{ list-style: none; margin: 0; padding: 0; display:flex; flex-direction: column; gap: 5px }
+.now li{ display:flex; flex-direction: column; gap: 2px; line-height: 1.35 }
+.now li .t{ color: var(--tn-ink); font-weight: 500; font-size: 13.5px }
+.now li .d{ display:flex; flex-wrap: wrap; gap: 3px }
+.now li .d .tg{ font-size: 12.5px }
+.now .names{ display:flex; flex-wrap: wrap; gap: 3px 10px; font-size: 13px; color: var(--tn-ink-2) }
+.dr-grp{ margin-top: 10px }
+.dr-grp:first-child{ margin-top: 8px }
+.dr-grp h4{ margin: 0 0 4px; font-size: 11.5px; letter-spacing: .14em; color: var(--tn-ink-3); font-weight: 500 }
+.dr-row{ display:flex; align-items:center; gap: 6px; padding: 2px 0 }
+.dr-row .tg{ font-size: 14px }
+.dr-row .n{ font-family: var(--tn-f-mono); font-size: 12px; color: var(--tn-ink-3); min-width: 1.6em }
+.dr-row .nx{ margin-left: auto; font-size: 12.5px; color: var(--tn-ink-3); border: 1px solid var(--tn-line); border-radius: 6px; padding: 0 7px; cursor: default; white-space: nowrap }
+.dr-row .nx:hover, .dr-row .nx.on{ color: var(--tn-ink); border-color: var(--tn-ink-3); background: var(--tn-paper-2) }
+
+/* ---------- 标签 ---------- */
+.tg{ display:inline-flex; align-items:center; white-space: nowrap; font-size: calc(14.5px * var(--tn-z)); line-height: 1.45; padding: 0 .42em; font-weight: 500; cursor: default; border-radius: 3px 7px 4px 6px / 6px 3px 7px 4px; transition: box-shadow .15s, opacity .15s; }
+.tg.hi{ background: oklch(var(--tn-hlL) var(--tn-hlC) var(--h, 250)); color: oklch(var(--tn-tgL) var(--tn-tgC) var(--h, 250)); }
+.tg.st{ color: var(--tn-ink-2); box-shadow: inset 0 0 0 1px var(--tn-line-2); border-radius: 4px; font-size: calc(13.5px * var(--tn-z)); font-weight: 500 }
+.tg.lo{ color: var(--tn-ink-2); border: 1px dashed var(--tn-line-2); border-radius: 4px; font-size: calc(13px * var(--tn-z)); font-style: italic; font-weight: 400 }
+.work .tg.lo::before, .hnode .tg.lo::before, .ltags .tg.lo::before, .dr-row .tg.lo::before{ content: "低频·"; font-style: normal; color: var(--tn-ink-3); font-size: .82em; }
+.tg.hi.gh{ background: transparent; color: var(--tn-ink-2); box-shadow: inset 0 -0.34em 0 oklch(var(--tn-hlL) var(--tn-hlC) var(--h, 250)); border-radius: 0; padding: 0 .12em; margin: 0 .18em; font-weight: 400 }
+.tg.st.gh{ opacity: .62 }
+.tg.neg{ background: transparent; color: var(--tn-ink-2); box-shadow: inset 0 0 0 1px oklch(var(--tn-lnL) var(--tn-lnC) var(--h, 250) / .55); border-radius: 4px; }
+.tg.neg::before{ content: "非"; color: var(--tn-ink-3); font-weight: 400; margin-right: .08em }
+.tg.neg.st{ box-shadow: inset 0 0 0 1px var(--tn-line-2) }
+.tg.plus::before{ content: "+"; font-family: var(--tn-f-mono); font-weight: 600; margin-right: .1em; opacity: .75 }
+.tg.minus{ background: transparent; color: var(--tn-ink-2); box-shadow: inset 0 0 0 1px oklch(var(--tn-lnL) var(--tn-lnC) var(--h, 250) / .6); border-radius: 4px; text-decoration: line-through; text-decoration-color: oklch(var(--tn-lnL) var(--tn-lnC) var(--h, 250)); text-decoration-thickness: 1.5px }
+.tg.minus::before{ content: "−"; font-family: var(--tn-f-mono); font-weight: 600; margin-right: .12em; text-decoration: none; display:inline-block }
+.tg.minus.st{ box-shadow: inset 0 0 0 1px var(--tn-line-2); text-decoration-color: var(--tn-ink-3) }
+.swap{ display:inline-flex; align-items:center; gap: 2px; font-size: calc(13px * var(--tn-z)); color: var(--tn-ink-3) }
+.tg.on, .dr-row .tg:hover{ box-shadow: 0 0 0 2px var(--tn-accent); }
+.tg.hi.gh.on{ box-shadow: inset 0 -0.34em 0 oklch(var(--tn-hlL) var(--tn-hlC) var(--h, 250)), 0 0 0 2px var(--tn-accent) }
+.none{ color: var(--tn-ink-3); font-size: calc(13.5px * var(--tn-z)); font-style: italic }
+
+/* ---------- 作品卡片 ---------- */
+.work{ position: absolute; display: grid; grid-template-columns: auto minmax(0,1fr); column-gap: 10px; align-items: start;
+  background: var(--tn-card); border: 1px solid var(--tn-line); border-radius: 10px; padding: 8px 11px 9px 8px; box-shadow: var(--tn-shadow); transition: opacity .18s, box-shadow .18s; }
+.work .cv{ grid-row: 1 / span 2; width: calc(40px * var(--tn-z)); height: calc(56px * var(--tn-z)); object-fit: cover; border-radius: 4px; display:block; background: var(--tn-paper-2); }
+.cv.ph{ display:flex; align-items:center; justify-content:center; font-family: var(--tn-f-display); font-weight: 900; color: var(--tn-ink-3); font-size: calc(17px * var(--tn-z)) }
+:host(.tn-nocover) .work{ grid-template-columns: minmax(0,1fr); padding-left: 12px }
+:host(.tn-nocover) .cv{ display: none !important }
+.wh{ display:flex; align-items: baseline; gap: 4px 10px; flex-wrap: wrap; min-width: 0 }
+.wt{ font-weight: 700; font-size: calc(17px * var(--tn-z)); line-height: 1.32; letter-spacing: .01em; overflow-wrap: anywhere; cursor: default }
+.wn{ font-weight: 500; font-size: .9em; color: var(--tn-ink-2); letter-spacing: 0; white-space: nowrap }  /* 用户手写备注，显示在作品名后的括号里 */
+.wm{ font-family: var(--tn-f-mono); font-size: calc(13px * var(--tn-z)); color: var(--tn-ink-2); white-space: nowrap; letter-spacing: -.01em }
+.wm .sc{ color: var(--tn-ink); font-weight: 600; margin-left: .55em }
+.wtags{ display:flex; flex-wrap: wrap; gap: 4px 5px; margin-top: 5px; align-items: center }
+.work.compact{ padding: 7px 9px 8px 7px; column-gap: 8px }
+.work.compact .cv{ width: calc(32px * var(--tn-z)); height: calc(45px * var(--tn-z)) }
+.work.compact .wt{ font-size: calc(16px * var(--tn-z)) }
+:host(.tn-openable) .wt{ cursor: pointer }
+
+/* 悬停作品时，近邻卡片角上的差别徽标：用与画板一致的标签样式 */
+.diff{ position: absolute; top: -13px; right: 8px; display: none; gap: 3px; align-items:center; background: var(--tn-card); border: 1.5px solid var(--tn-accent); border-radius: 999px; padding: 1px 4px; white-space: nowrap; z-index: 5; box-shadow: var(--tn-shadow); pointer-events: none }
+.diff.show{ display: inline-flex }
+.diff.t2{ border-color: var(--tn-line-2) }
+.diff .tg{ font-size: calc(12.5px * var(--tn-z)); line-height: 1.35 }
+.diff .eqx{ font-size: calc(12.5px * var(--tn-z)); color: var(--tn-ink-2); padding: 0 4px }
+
+/* ---------- 悬停状态 ---------- */
+.board .dm, .board .eg{ transition: opacity .18s }
+.board.hovering .dm:not(.hl){ opacity: .14 }
+.board.hovering .eg:not(.hl){ opacity: .1 }
+.board.hovering .work.hl{ box-shadow: 0 0 0 1.5px var(--tn-line-2), var(--tn-shadow) }
+.board.hovering .work.focus, .board.hovering .hnode.focus{ box-shadow: 0 0 0 2.5px var(--tn-accent), var(--tn-shadow); z-index: 4 }
+.board.hovering .hw.focus .wt, .board.hovering .lrow.focus .wt, .board.hovering .srow.focus .wt{ color: var(--tn-accent) }
+.board.hovering .lrow.focus, .board.hovering .srow.focus .ttl{ background: var(--tn-accent-2) }
+.eg.hl path, path.eg.hl{ stroke: var(--tn-accent) !important; stroke-opacity: 1 !important }
+/* 程序聚焦（focusWorks）：次要作品 = 虚线框、比主高亮淡、自己不变淡；flash = 作品框外闪 3 下（减少动效时一次淡入淡出） */
+.board.hovering .dm.sec{ opacity: 1 }
+.board.hovering .work.sec, .board.hovering .hw.sec, .board.hovering .lrow.sec, .board.hovering .srow.sec > .ttl{ outline: 2px dashed color-mix(in oklch, var(--tn-accent) 55%, transparent); outline-offset: 2px }
+.board.hovering .fl{ animation: tn-flash .5s ease-in-out 3 both }
+@keyframes tn-flash{ 0%, 100%{ outline: 3px solid transparent; outline-offset: 3px } 50%{ outline: 3px solid var(--tn-accent); outline-offset: 3px } }
+@media (prefers-reduced-motion: reduce){ .board.hovering .fl{ animation: tn-flash 1.5s ease-in-out 1 both } }
+
+/* ---------- 设计说明 ---------- */
+.notes{ display:grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); gap: 14px 30px; margin-top: 22px; }
+.notes section h3{ font-size: 13px; letter-spacing: .12em; color: var(--tn-ink-3); margin: 0 0 4px; font-weight: 500 }
+.notes section p{ margin: 0; color: var(--tn-ink-2); max-width: 62ch }
+
+/* ---------- 01 分支画布 ---------- */
+.cv-root{ position:absolute; background: var(--tn-ink); color: var(--tn-paper); border-radius: 12px; padding: 10px 16px 11px; box-shadow: var(--tn-shadow) }
+.cv-root .t{ font-family: var(--tn-f-display); font-weight: 900; font-size: calc(21px * var(--tn-z)); white-space: nowrap }
+.cv-root .m{ font-size: calc(13.5px * var(--tn-z)); opacity: .8; white-space: nowrap }
+.cv-box{ position:absolute; border: 1.5px solid var(--tn-line-2); border-radius: 18px; background: color-mix(in oklch, var(--tn-card) 55%, transparent) }
+.cv-tab{ position:absolute; display:flex; flex-direction: column; align-items:flex-start; gap: 1px; background: var(--tn-card); border: 1.5px solid var(--tn-line-2); border-radius: 999px; padding: 4px 14px 5px 8px; white-space: nowrap; box-shadow: var(--tn-shadow) }
+.cv-tab .tg{ font-size: calc(18px * var(--tn-z)); font-weight: 700 }
+.cv-tab .pc{ display:flex; align-items:center; gap: 9px }
+.cnt{ font-family: var(--tn-f-mono); font-size: calc(12.5px * var(--tn-z)); color: var(--tn-ink-3); white-space: nowrap }
+.pill{ position:absolute; display:flex; flex-direction: column; align-items:flex-start; gap: 1px; background: var(--tn-card); border: 1px solid var(--tn-line-2); border-radius: 14px; padding: 3px 10px 4px 5px; white-space: nowrap; box-shadow: var(--tn-shadow) }
+.pill .pc{ display:flex; align-items:center; gap: 5px }
+/* 大纲式分列时，列顶重复的上一列的标签：虚线框、不带阴影 */
+.pill.cont{ border-style: dashed; box-shadow: none }
+.pill .tg{ font-size: calc(15.5px * var(--tn-z)); font-weight: 600 }
+.rest{ font-size: calc(15px * var(--tn-z)); color: var(--tn-ink-2); padding-left: 6px }
+.abs{ display:inline-flex; align-items:center; gap: 3px; font-size: calc(12.5px * var(--tn-z)); color: var(--tn-ink-3); padding-left: 4px }
+.abs .tg{ font-size: calc(14px * var(--tn-z)) !important; font-weight: 500 !important }
+svg .edge{ fill: none; stroke: var(--tn-edge); stroke-width: 1.8; stroke-linecap: round }
+
+/* ---------- 02 标签谱 ---------- */
+.score{ display: inline-block }
+.srow{ display:grid; grid-template-columns: var(--cols); align-items: stretch; position: relative }
+.srow.gap{ margin-top: 14px }
+.srow.hd .c{ display:flex; flex-direction: column; align-items:center; justify-content:flex-end; gap: 1px; padding-bottom: 6px; font-size: calc(13.5px * var(--tn-z)); color: var(--tn-ink-2); font-weight: 500 }
+.srow.hd .c .f{ font-family: var(--tn-f-mono); font-size: calc(11.5px * var(--tn-z)); color: var(--tn-ink-3) }
+.srow.seg .c{ font-size: calc(12px * var(--tn-z)); color: var(--tn-ink-3); letter-spacing: .1em; border-bottom: 1px solid var(--tn-line-2); margin: 0 4px; padding-bottom: 2px; text-align: center; white-space: nowrap }
+.srow.body:hover .ttl{ background: var(--tn-accent-2) }
+.ttl{ display:grid; grid-template-columns: auto minmax(0,1fr) auto; align-items:center; gap: 9px; padding: 4px 10px 4px 4px; border-radius: 8px; min-height: calc(46px * var(--tn-z)); position: relative }
+.ttl .cv{ width: calc(28px * var(--tn-z)); height: calc(39px * var(--tn-z)); object-fit: cover; border-radius: 3px; display:block; background: var(--tn-paper-2) }
+:host(.tn-nocover) .ttl{ grid-template-columns: minmax(0,1fr) auto }
+.ttl .wt{ font-size: calc(16.5px * var(--tn-z)); line-height: 1.28; padding-block: 2px }
+.ttl .wm{ text-align: right }
+.ttl .diff{ top: -10px; right: auto; left: 40px }
+.sc-cell{ display:flex; align-items:center; justify-content:center; margin: 3px 2px; border-radius: 6px; font-size: calc(14.5px * var(--tn-z)); font-weight: 500; white-space: nowrap; cursor: default }
+.sc-cell.on.hi{ background: oklch(var(--tn-hlL) var(--tn-hlC) var(--h,250)); color: oklch(var(--tn-tgL) var(--tn-tgC) var(--h,250)); }
+.sc-cell.on.st{ box-shadow: inset 0 0 0 1px var(--tn-line-2); color: var(--tn-ink-2); font-size: calc(13.5px * var(--tn-z)) }
+.sc-cell.on.lo{ border: 1px dashed var(--tn-line-2); color: var(--tn-ink-2); font-style: italic; font-size: calc(13px * var(--tn-z)) }
+.sc-cell.jt{ margin-top: 0; border-top-left-radius: 0; border-top-right-radius: 0 }
+.sc-cell.jb{ margin-bottom: 0; border-bottom-left-radius: 0; border-bottom-right-radius: 0 }
+.sc-cell.st.jt{ box-shadow: inset 1px 0 0 var(--tn-line-2), inset -1px 0 0 var(--tn-line-2), inset 0 -1px 0 var(--tn-line-2) }
+.sc-cell.st.jb{ box-shadow: inset 1px 0 0 var(--tn-line-2), inset -1px 0 0 var(--tn-line-2), inset 0 1px 0 var(--tn-line-2) }
+.sc-cell.st.jt.jb{ box-shadow: inset 1px 0 0 var(--tn-line-2), inset -1px 0 0 var(--tn-line-2) }
+.sc-cell.off::after{ content: "·"; color: var(--tn-line-2) }
+.sc-cell.off:hover::after, .sc-cell.off.on::after{ content: "非" attr(data-ntag); color: var(--tn-ink-3); font-size: calc(12.5px * var(--tn-z)) }
+.sc-cell.off.on{ box-shadow: inset 0 0 0 1.5px var(--tn-accent) }
+.sc-cell.on.on2{ box-shadow: 0 0 0 2px var(--tn-accent) }
+.dcell{ display:flex; align-items:center; gap: 4px; padding-left: 12px; flex-wrap: wrap; font-size: calc(13px * var(--tn-z)) }
+.dcell .tg{ font-size: calc(13.5px * var(--tn-z)) }
+.dcell .eq{ color: var(--tn-ink-3) }
+.dcell .up{ color: var(--tn-ink-3); font-size: 11.5px; margin-right: 2px }
+
+/* ---------- 03 卡诺图 ---------- */
+.kmap{ display:grid; gap: 0; }
+.kh{ display:flex; align-items:center; justify-content:center; gap: 6px; padding: 5px 6px; margin: 3px; border-radius: 8px; font-size: calc(15.5px * var(--tn-z)); white-space: nowrap; cursor: default; }
+.kh .tg{ font-size: calc(16px * var(--tn-z)); font-weight: 700 }
+.kh.pos{ background: color-mix(in oklch, oklch(var(--tn-hlL) var(--tn-hlC) var(--h,250)) 55%, transparent) }
+.kh.neg{ border: 1.5px dashed oklch(var(--tn-lnL) var(--tn-lnC) var(--h,250) / .5); color: var(--tn-ink-2) }
+.kh.neg .tg{ font-weight: 500 }
+.kh.vert{ flex-direction: column }
+.kc{ position: relative; border: 1px solid var(--tn-line-2); margin: -0.5px; padding: 30px 10px 10px; min-height: 92px; display:flex; flex-direction: column; gap: 9px; background: color-mix(in oklch, var(--tn-card) 40%, transparent) }
+.kc.empty{ background-image: repeating-linear-gradient(135deg, transparent 0 9px, var(--tn-line) 9px 10px); }
+.kc .cap{ position:absolute; left: 8px; top: 5px; display:flex; gap: 3px; align-items:center; flex-wrap: nowrap; font-size: calc(12.5px * var(--tn-z)); color: var(--tn-ink-3) }
+.kc .cap .tg{ font-size: calc(13px * var(--tn-z)) }
+.kc .work{ position: relative }
+.kc .ecap{ color: var(--tn-ink-3); font-size: calc(13px * var(--tn-z)); margin: auto; font-style: italic }
+.kwrap{ font-size: 12.5px; color: var(--tn-ink-3); text-align: center; padding-top: 4px }
+
+/* ---------- 04 增减阶梯 ---------- */
+.hnode{ position:absolute; background: var(--tn-card); border: 1px solid var(--tn-line); border-radius: 10px; box-shadow: var(--tn-shadow); padding: 7px 10px 9px 8px; display:flex; flex-direction: column; gap: 4px }
+.hnode.multi{ border-style: double; border-width: 3px }
+.hw{ position: relative; display:grid; grid-template-columns: auto minmax(0,1fr); column-gap: 9px; align-items: center; border-radius: 6px }
+.hw .cv{ width: calc(30px * var(--tn-z)); height: calc(42px * var(--tn-z)); object-fit: cover; border-radius: 3px; display:block; background: var(--tn-paper-2) }
+:host(.tn-nocover) .hw{ grid-template-columns: minmax(0,1fr) }
+.hw .wt{ font-size: calc(16.5px * var(--tn-z)) }
+.hw .diff{ top: -25px; right: -6px }
+.hnode .wtags{ margin-top: 2px }
+.hlab{ position:absolute; display:flex; gap: 3px; align-items:center; background: var(--tn-paper-2); padding: 1px 3px; border-radius: 6px; white-space: nowrap }
+.hlab .tg{ font-size: calc(14px * var(--tn-z)); font-weight: 600 }
+.hlab.faint .tg{ font-weight: 500 }
+.hlayer{ position:absolute; font-size: calc(12.5px * var(--tn-z)); color: var(--tn-ink-3); white-space: nowrap; line-height: 1.3 }
+.hlayer b{ display:block; font-family: var(--tn-f-mono); font-size: calc(20px * var(--tn-z)); color: var(--tn-ink-2); font-weight: 500 }
+svg .hedge{ fill:none; stroke: var(--tn-edge); stroke-width: 2; }
+svg .hedge.two{ stroke-dasharray: 6 5 }
+svg .hswap{ fill:none; stroke: var(--tn-edge); stroke-width: 1.6; stroke-dasharray: 2 5; stroke-linecap: round }
+
+/* ---------- 05 领地图 ---------- */
+svg .terr{ fill: oklch(var(--tn-hlL) var(--tn-hlC) var(--h,250) / .16); stroke: oklch(var(--tn-lnL) var(--tn-lnC) var(--h,250)); stroke-width: 2.2; transition: opacity .18s, stroke-width .18s }
+svg .terr.neg{ fill: none; stroke-dasharray: 7 5; stroke-width: 2 }
+svg .cellgrid{ stroke: var(--tn-line); stroke-width: 1; stroke-dasharray: 2 6 }
+.board.hovering svg .terr{ opacity: .18 }
+.board.hovering svg .terr.on{ opacity: 1; stroke-width: 3.4; fill: oklch(var(--tn-hlL) var(--tn-hlC) var(--h,250) / .32) }
+.tlab{ position:absolute; transform: translateY(-50%); background: var(--tn-paper-2); padding: 0 3px; border-radius: 6px; display:flex; z-index: 2 }
+.tlab .tg{ font-size: calc(15px * var(--tn-z)); font-weight: 700 }
+.tlab .tg.neg{ font-weight: 600; background: var(--tn-paper-2) }
+
+/* ---------- 06 谱系 ---------- */
+.lrow{ position:absolute; display:flex; align-items:center; gap: 10px; border-radius: 10px; padding: 3px 10px 3px 4px; }
+.lrow:hover{ background: color-mix(in oklch, var(--tn-accent-2) 70%, transparent) }
+.lrow .dl{ display:flex; gap: 3px; align-items:center; flex: none }
+.lrow .dl .tg{ font-size: calc(14px * var(--tn-z)); font-weight: 600 }
+.lrow .dl .same{ font-size: calc(13px * var(--tn-z)); color: var(--tn-ink-2); border: 1px solid var(--tn-line-2); border-radius: 4px; padding: 0 6px }
+.lrow .dl .start{ font-size: calc(13px * var(--tn-z)); color: var(--tn-paper); background: var(--tn-ink); border-radius: 4px; padding: 0 7px }
+.lrow .cv{ width: calc(28px * var(--tn-z)); height: calc(39px * var(--tn-z)); object-fit: cover; border-radius: 3px; display:block; background: var(--tn-paper-2); flex: none }
+.lrow .wt{ font-size: calc(16.5px * var(--tn-z)); white-space: nowrap }
+.lrow .diff{ top: -11px; right: auto; left: 30px }
+.ltags{ position:absolute; display:flex; flex-wrap: nowrap; gap: 4px 5px; align-items:center; }
+svg .lline{ fill:none; stroke: var(--tn-edge); stroke-width: 1.6 }
+.lrule{ position:absolute; height: 1px; background: var(--tn-line) }
+
+/* 窄排版按导图自己所在区域的宽度判断，不按浏览器窗口：嵌进出题器主区或 Obsidian 分栏时同样适用 */
+@container tn (max-width: 720px){
+  .frame{ grid-template-columns: minmax(0,1fr) }
+  .drawer, .root.full .drawer{ position: static; width: auto; max-height: none; overflow: visible; order: -1; margin-bottom: 14px }
+  .dr-list{ overflow: visible; margin-right: 0; padding-right: 0 }
+  .board-wrap{ padding: 18px 14px 22px; border-radius: 10px }
+  .vhead h2{ font-size: 22px }
+}
+
+/* ---------- 'pane' 布局：占满宿主的高度，图区自己两个方向滚动，可以移动缩放 ---------- */
+/* 宿主要给引擎一个确定的高度（分屏里的格子）。顶栏在上；图区 = 剩下的高度；侧栏是独立的一列、自己滚动 */
+.root.pane{ height: 100%; min-height: 0; display:flex; flex-direction: column }
+.root.pane > .bar{ flex: none }
+.root.pane .frame{ flex: 1 1 auto; min-height: 0; position: relative; grid-template-rows: minmax(0,1fr); align-items: stretch; padding-block: 12px }
+.root.pane .main{ min-height: 0; display:flex; flex-direction: column }
+.root.pane .view{ flex: 1 1 auto; min-height: 0; display:flex; flex-direction: column }
+.root.pane .vhead{ flex: none }
+.root.pane .custom{ flex: 1 1 auto; min-height: 0; overflow: auto }
+.root.pane .notes{ flex: none; max-height: 30%; overflow-y: auto; margin-top: 14px; scrollbar-width: thin }
+.bw-box{ flex: 1 1 auto; min-height: 0; position: relative; display:flex }
+/* 占位层（.zsz）= 画板缩放后的尺寸；四周外边距由引擎按图区尺寸设（各留半个图区减内边距），平移时视区中心能到画板上任意一点；
+   画板贴在它左上角、transform 缩放。有了留白两个方向总能滚：滚动条一直留着（scroll，免得出现 / 消失时图区尺寸来回变），做细做淡 */
+.root.pane .board-wrap{ flex: 1 1 auto; min-width: 0; min-height: 0; display:flex; overflow: scroll; overflow-anchor: none; overscroll-behavior: contain;
+  scrollbar-width: thin; scrollbar-color: var(--tn-line-2) transparent; background-attachment: local }
+.zsz{ flex: none; margin: 0; position: relative }
+.root.pane .board{ position: absolute; left: 0; top: 0; margin: 0; transform-origin: 0 0 }
+/* 侧栏：撑满格子高度的一列，不吸顶、不靠页面滚动（覆盖上面 720px 容器查询里的窄排版） */
+.root.pane .drawer, .root.pane.full .drawer{ position: relative; top: auto; width: var(--tn-drawer-w, 248px); max-height: none; margin-bottom: 0; overflow: hidden; order: 0; align-self: stretch; min-height: 0 }
+.root.pane .dr-list{ overflow-y: auto; margin-right: -6px; padding: 0 6px 8px 0 }
+.root.pane.full{ overflow: hidden; padding: 0 20px }
+/* 窄宿主（≤ 720px，由引擎加 .narrow）：侧栏默认收起；「标签与近邻」把它作为浮层从右侧滑出，盖在图上，不挤压图区 */
+.root.pane.narrow .frame{ grid-template-columns: minmax(0,1fr); padding-block: 8px }
+.root.pane.narrow .drawer, .root.pane.narrow.full .drawer{ position: absolute; top: 8px; right: 0; bottom: 8px; z-index: 25;
+  width: min(var(--tn-drawer-w, 280px), calc(100% - 24px));
+  box-shadow: var(--tn-shadow), 0 18px 40px -18px oklch(0 0 0 / .45); animation: tn-slide-in .18s ease-out }
+@keyframes tn-slide-in{ from{ transform: translateX(16px); opacity: 0 } to{ transform: none; opacity: 1 } }
+/* 'pane' 的顶栏：视图标签放不下时横向滚动，哪边还有没露出来的标签哪边淡出（--tn-fl / --tn-fr 由引擎按滚动位置设，0px = 不淡出） */
+.root.pane .tabs.ovf{ -webkit-mask-image: linear-gradient(to right, transparent 0, #000 var(--tn-fl, 0px), #000 calc(100% - var(--tn-fr, 0px)), transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0, #000 var(--tn-fl, 0px), #000 calc(100% - var(--tn-fr, 0px)), transparent 100%) }
+/* 封面 / 配色外面那层：平时不占位置（和没有这层一样）；「⋯」按钮和「标签与近邻」的图标只在窄宿主时出现 */
+.tset{ display: contents }
+.more-btn, .drawer-btn .ic{ display: none }
+/* 窄宿主的顶栏只占一行：标签在左（可横向滚动），工具在右，只留图标（悬停有 title）；封面 / 配色收进「⋯」菜单 */
+.root.pane.narrow > .bar{ flex-wrap: nowrap; gap: 0 8px }
+.root.pane.narrow .tabs{ flex: 1 1 auto; scrollbar-width: none; padding-top: 4px }
+.root.pane.narrow .tabs::-webkit-scrollbar{ display: none }
+.root.pane.narrow .tab{ padding: 6px 10px 7px; font-size: 14.5px }
+.root.pane.narrow .tab .no{ margin-right: 4px }
+.root.pane.narrow .tools{ flex: none; flex-wrap: nowrap; gap: 4px; padding-block: 4px 6px; position: relative; align-self: center }
+.root.pane.narrow .more-btn, .root.pane.narrow .drawer-btn, .root.pane.narrow .full-btn{ display: inline-flex; align-items: center; justify-content: center; flex: none;
+  width: 30px; height: 30px; padding: 0; gap: 0; border: 1px solid var(--tn-line-2); background: var(--tn-card); border-radius: 999px; color: var(--tn-ink-2) }
+.root.pane.narrow .more-btn:hover, .root.pane.narrow .drawer-btn:hover, .root.pane.narrow .full-btn:hover{ color: var(--tn-ink); border-color: var(--tn-ink-3) }
+.root.pane.narrow .drawer-btn > span, .root.pane.narrow .full-btn > span{ display: none }
+.root.pane.narrow .drawer-btn .ic{ display: block }
+.root.pane.narrow .drawer-btn[aria-expanded="true"], .root.pane.narrow .more-btn[aria-expanded="true"]{ background: var(--tn-ink); color: var(--tn-paper); border-color: var(--tn-ink) }
+.ic{ width: 14px; height: 14px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round }
+.ic.dots{ fill: currentColor; stroke: none }
+.root.pane.narrow .tset{ display: none }
+.root.pane.narrow .tset.open{ display: flex; flex-direction: column; align-items: stretch; gap: 6px; position: absolute; top: calc(100% + 4px); right: 0; z-index: 40;
+  padding: 8px; background: var(--tn-card); border: 1px solid var(--tn-line); border-radius: 14px; box-shadow: var(--tn-shadow), 0 18px 40px -18px oklch(0 0 0 / .45) }
+.root.pane.narrow .tset.open .ctl{ justify-content: space-between; white-space: nowrap }
+/* 不在初始位置（平移或缩放过）时图区右下角的小标签，显示缩放百分比；点它回到初始 */
+.zoom-badge{ position: absolute; right: 10px; bottom: 10px; z-index: 6; font-family: var(--tn-f-mono); font-size: 11.5px; line-height: 1; letter-spacing: .02em;
+  color: var(--tn-ink-3); background: color-mix(in oklch, var(--tn-card) 82%, transparent); border: 1px solid var(--tn-line); border-radius: 999px; padding: 4px 8px;
+  backdrop-filter: blur(2px) }
+.zoom-badge:hover{ color: var(--tn-ink); border-color: var(--tn-line-2); background: var(--tn-card) }
+/* 按住空格：抓手 */
+.root.pane.grab .board-wrap, .root.pane.grab .board-wrap *{ cursor: grab !important; user-select: none }
+.root.pane.grabbing .board-wrap, .root.pane.grabbing .board-wrap *{ cursor: grabbing !important }
+@media (prefers-reduced-motion: reduce){ *{ transition: none !important } .root.pane.narrow .drawer{ animation: none } }
